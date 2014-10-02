@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 2f3e5b9385447403fb7a93d0bb9160b4
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - titleScene: {fileID: 100000, guid: 19e65eff8901a49e5b89ddae0f75515f, type: 2}
+  - gameScene: {fileID: 100000, guid: f9392ab6a14cc497d9bc12cd4b910680, type: 2}
+  - resultScene: {fileID: 100000, guid: 0e26b51d691d946b1bfca0bec2d7110b, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
