@@ -33,4 +33,9 @@ public class Player : MonoBehaviour {
 			transform.Rotate(Vector3.up, 0.0f);
 		}
 	}
+
+	private void OnCollisionEnter(Collision collision) {
+		if(collision.gameObject.tag == "jumparea") {
+		}
+	}
 }
