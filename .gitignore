@@ -27,3 +27,5 @@
 *.out
 *.app
 
+Temp
+Library/assetDatabase3
