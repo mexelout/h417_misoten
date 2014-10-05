@@ -66,6 +66,8 @@ public class Player : MonoBehaviour {
 	private void OnTriggerEnter(Collider collider) {
 		if(collider.gameObject.CompareTag("Dash")) {
 			speed = speedDefault * 1.5f;
+			// とりあえず3秒早い
+			Invoke("undoSpeed", 3);
 		}
 
 		if(collider.gameObject.CompareTag("Bonus")) {
@@ -93,5 +95,9 @@ public class Player : MonoBehaviour {
 			jumpPower = jumpPowerDefault;
 		}
 		print(collider.gameObject.tag);
+	}
+
+	private void undoSpeed() {
+		speed = speedDefault;
 	}
 }
