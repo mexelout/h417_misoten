@@ -2,40 +2,84 @@
 using System.Collections;
 
 public class Player : MonoBehaviour {
-
 	public float speed = 30;
+	public int lane;
 	private GameManager gm;
+	private Animator anm;
+	private int anmSpeedHash;
+	private int anmJumpHash;
+	public float jumpPower;
+	public float jumpPowerDefault = 100;
 
-	// Use this for initialization
-	void Start () {
+	void Start() {
 		gm = GameObject.FindObjectOfType<GameManager>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		float vertical = speed * Time.deltaTime;
-		//Input.GetAxis("Vertical") * speed * Time.deltaTime;
-		//float horizontal = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+		anm = GetComponent<Animator>();
+		anmSpeedHash = Animator.StringToHash("Speed");
+		anmJumpHash = Animator.StringToHash("Jump");
+		lane = 0;
 
-		if(gm.GetStartCount() > 0) vertical *= 0;
+		jumpPower = jumpPowerDefault;
+	}
+
+	void Update() {
+		float vertical = speed * Time.deltaTime;
+
+		float horizontal = Input.GetAxis("Horizontal");
+
+		if(gm.GetStartCount() > 0)
+			vertical *= 0;
 
 		transform.Translate(0, 0, vertical);
 
-		Animator anm = GetComponent<Animator>();
-		anm.SetFloat(Animator.StringToHash("Speed"), vertical);
+		anm.SetFloat(anmSpeedHash, vertical);
 
-		if(transform.position.z > 1000) {
-			transform.position = new Vector3(transform.position.x, transform.position.y, 999);
-			transform.Rotate(Vector3.up, 180.0f);
+		if(Input.GetAxis("Jump") > 0 && anm.GetBool(anmJumpHash) == false) {
+			anm.SetBool(anmJumpHash, true);
+			rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 		}
-		if(transform.position.z < -30) {
-			transform.position = new Vector3(transform.position.x, transform.position.y, -29);
-			transform.Rotate(Vector3.up, 0.0f);
+
+		if(horizontal > 0) {
+			if(lane == 0) {
+				lane++;
+				transform.position += transform.right*3;
+			}
+		} else if(horizontal < 0) {
+			if(lane == 1) {
+				lane--;
+				transform.position += transform.right*-3;
+			}
 		}
 	}
 
 	private void OnCollisionEnter(Collision collision) {
-		if(collision.gameObject.tag == "jumparea") {
+		Vector3 dir = collision.gameObject.transform.up * -1;
+		transform.LookAt(dir + transform.position);
+		anm.SetBool(anmJumpHash, false);
+	}
+
+	private void OnCollisionStay(Collision collision) {
+		anm.SetBool(anmJumpHash, false);
+	}
+
+	private void OnTriggerEnter(Collider collider) {
+		// ジャンプエリアはisTrigger設定なのでこっち
+		if(collider.gameObject.CompareTag("JumpArea")) {
+			jumpPower = jumpPowerDefault * 2.5f;
 		}
+		if(collider.gameObject.CompareTag("Finish")) {
+			SceneManager sm = FindObjectOfType<SceneManager>();
+			print(sm);
+			if(sm != null) {
+				sm.NextScene();
+			}
+		}
+		print(collider.gameObject.tag);
+	}
+
+	private void OnTriggerExit(Collider collider) {
+		if(collider.gameObject.CompareTag("JumpArea")) {
+			jumpPower = jumpPowerDefault;
+		}
+		print(collider.gameObject.tag);
 	}
 }
