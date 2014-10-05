@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class Player : MonoBehaviour {
-	public float speed = 30;
+	public float speed;
+	public float speedDefault = 30;
 	public int lane;
 	private GameManager gm;
 	private Animator anm;
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour {
 		anmJumpHash = Animator.StringToHash("Jump");
 		lane = 0;
 
+		speed = speedDefault;
 		jumpPower = jumpPowerDefault;
 	}
 
@@ -41,12 +43,12 @@ public class Player : MonoBehaviour {
 		if(horizontal > 0) {
 			if(lane == 0) {
 				lane++;
-				transform.position += transform.right*3;
+				transform.position += transform.right * 3;
 			}
 		} else if(horizontal < 0) {
 			if(lane == 1) {
 				lane--;
-				transform.position += transform.right*-3;
+				transform.position += transform.right * -3;
 			}
 		}
 	}
@@ -62,10 +64,16 @@ public class Player : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter(Collider collider) {
-		// ジャンプエリアはisTrigger設定なのでこっち
-		if(collider.gameObject.CompareTag("JumpArea")) {
-			jumpPower = jumpPowerDefault * 2.5f;
+		if(collider.gameObject.CompareTag("Dash")) {
+			speed = speedDefault * 1.5f;
 		}
+
+		if(collider.gameObject.CompareTag("Bonus")) {
+			jumpPower = jumpPowerDefault * 5.5f;
+		}
+
+		// なんとなくこっちに次のシーンへ行く処理書いてしまったが、、、
+		// 後にGameSceneへ移行する
 		if(collider.gameObject.CompareTag("Finish")) {
 			SceneManager sm = FindObjectOfType<SceneManager>();
 			print(sm);
@@ -77,7 +85,11 @@ public class Player : MonoBehaviour {
 	}
 
 	private void OnTriggerExit(Collider collider) {
-		if(collider.gameObject.CompareTag("JumpArea")) {
+		if(collider.gameObject.CompareTag("Dash")) {
+			//speed = speedDefault;
+		}
+
+		if(collider.gameObject.CompareTag("Bonus")) {
 			jumpPower = jumpPowerDefault;
 		}
 		print(collider.gameObject.tag);
