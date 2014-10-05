@@ -12,6 +12,10 @@ public class Player : MonoBehaviour {
 	public float jumpPower;
 	public float jumpPowerDefault = 100;
 
+	// フィニッシュの処理をここに書いているのでここでカウント(ゲームマネージャに後で移行)
+	private int frameCount;
+	private bool isPlay;
+
 	void Start() {
 		gm = GameObject.FindObjectOfType<GameManager>();
 		anm = GetComponent<Animator>();
@@ -21,6 +25,8 @@ public class Player : MonoBehaviour {
 
 		speed = speedDefault;
 		jumpPower = jumpPowerDefault;
+		frameCount = 0;
+		isPlay = true;
 	}
 
 	void Update() {
@@ -51,6 +57,10 @@ public class Player : MonoBehaviour {
 				transform.position += transform.right * -3;
 			}
 		}
+
+		if(gm.GetStartCount() > 0 && isPlay) {
+			frameCount++;
+		}
 	}
 
 	private void OnCollisionEnter(Collision collision) {
@@ -68,19 +78,30 @@ public class Player : MonoBehaviour {
 			speed = speedDefault * 1.5f;
 			// とりあえず3秒早い
 			Invoke("undoSpeed", 3);
+
+			FindObjectOfType<ScoreManager>().AddScore(100);
 		}
 
 		if(collider.gameObject.CompareTag("Bonus")) {
 			jumpPower = jumpPowerDefault * 5.5f;
+			FindObjectOfType<ScoreManager>().AddScore(100);
 		}
 
 		// なんとなくこっちに次のシーンへ行く処理書いてしまったが、、、
 		// 後にGameSceneへ移行する
 		if(collider.gameObject.CompareTag("Finish")) {
-			SceneManager sm = FindObjectOfType<SceneManager>();
-			print(sm);
-			if(sm != null) {
+			try {
+				ScoreManager sm = FindObjectOfType<ScoreManager>();
+				int addScore = (frameCount > 200) ? 500 : 500 - (frameCount - 200) * 2;
+				sm.AddScore(addScore);
+			} catch {
+				print("not found score manager");
+			}
+			try {
+				SceneManager sm = FindObjectOfType<SceneManager>();
 				sm.NextScene();
+			} catch {
+				print("not found scene manager...");
 			}
 		}
 		print(collider.gameObject.tag);
