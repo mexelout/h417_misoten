@@ -6,6 +6,7 @@ public class Player : MonoBehaviour {
 	public float speedDefault = 30;
 	public int lane;
 	private GameManager gm;
+    protected static SoundManager SoundDevice;  //サウンド再生用デバイス
 	private Animator anm;
 	private int anmSpeedHash;
 	private int anmJumpHash;
@@ -99,7 +100,12 @@ public class Player : MonoBehaviour {
 			}
 			try {
 				SceneManager sm = FindObjectOfType<SceneManager>();
-				sm.NextScene();
+                
+                //サウンドデバイスを探索して取得
+                SoundDevice = (SoundManager)GameObject.FindObjectOfType<SoundManager>(); 
+				
+                sm.NextScene();
+                SoundDevice.NextScene();    //次シーンへインスタンスを譲渡
 			} catch {
 				print("not found scene manager...");
 			}

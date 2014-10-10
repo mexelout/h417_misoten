@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ResultManager : MonoBehaviour {
 
+    private SoundManager SoundDevice;       //サウンド再生用デバイス
+
 	// Use this for initialization
 	void Start () {
 		try {
@@ -15,6 +17,9 @@ public class ResultManager : MonoBehaviour {
 		} catch {
 			print("not found gui text or score manager...");
 		}
+
+        //サウンドデバイスを探索して取得
+        SoundDevice = (SoundManager)GameObject.FindObjectOfType<SoundManager>();
 	}
 	
 	// Update is called once per frame
@@ -23,6 +28,7 @@ public class ResultManager : MonoBehaviour {
 			SceneManager sm = FindObjectOfType<SceneManager>();
 			if(sm != null) {
 				sm.NextScene();
+                SoundDevice.NextScene();    //次シーンへインスタンスを譲渡
 			}
 		}
 	}

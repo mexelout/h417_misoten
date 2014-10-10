@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
 	private int startCount = 5;
 	private GUIText scoreBoard;
 	private ScoreManager sm;
+    private SoundManager SoundDevice;   //サウンド用デバイス
 
 	// Use this for initialization
 	void Start () {
