@@ -82,6 +82,11 @@ public class Player : MonoBehaviour {
 		anm.SetBool(anmJumpHash, false);
 	}
 
+	private void OnCollisionExit(Collision collision) {
+		Invoke("OffTheGroundLittle", 0.4f);
+		isOffBuilding = true;
+	}
+
 	private void OnTriggerEnter(Collider collider) 
 	{
 		try {
