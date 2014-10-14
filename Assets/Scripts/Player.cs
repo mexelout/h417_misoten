@@ -100,12 +100,8 @@ public class Player : MonoBehaviour {
 			}
 			try {
 				SceneManager sm = FindObjectOfType<SceneManager>();
-                
-                //サウンドデバイスを探索して取得
-                SoundDevice = (SoundManager)GameObject.FindObjectOfType<SoundManager>(); 
 				
-                sm.NextScene();
-                SoundDevice.NextScene();    //次シーンへインスタンスを譲渡
+				sm.NextScene();
 			} catch {
 				print("not found scene manager...");
 			}
