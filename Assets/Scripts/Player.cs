@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Player : MonoBehaviour {
@@ -6,7 +6,6 @@ public class Player : MonoBehaviour {
 	public float speedDefault = 30;
 	public int lane;
 	private GameManager gm;
-    protected static SoundManager SoundDevice;  //サウンド再生用デバイス
 	private Animator anm;
 	private int anmSpeedHash;
 	private int anmJumpHash;
@@ -74,20 +73,16 @@ public class Player : MonoBehaviour {
 		anm.SetBool(anmJumpHash, false);
 	}
 
-	private void OnTriggerEnter(Collider collider) {
-		if(collider.gameObject.CompareTag("Dash")) {
-			speed = speedDefault * 1.5f;
-			// とりあえず3秒早い
-			Invoke("undoSpeed", 3);
+	private void OnTriggerEnter(Collider collider) 
+	{
+		try {
+			SpecialFloor sf = collider.gameObject.GetComponent<SpecialFloor>();
+			sf.Execute(this);
+		} catch {
 
-			FindObjectOfType<ScoreManager>().AddScore(100);
 		}
-
-		if(collider.gameObject.CompareTag("Bonus")) {
-			jumpPower = jumpPowerDefault * 5.5f;
-			FindObjectOfType<ScoreManager>().AddScore(100);
-		}
-
+	}
+/*
 		// なんとなくこっちに次のシーンへ行く処理書いてしまったが、、、
 		// 後にGameSceneへ移行する
 		if(collider.gameObject.CompareTag("Finish")) {
@@ -98,17 +93,18 @@ public class Player : MonoBehaviour {
 			} catch {
 				print("not found score manager");
 			}
+
 			try {
 				SceneManager sm = FindObjectOfType<SceneManager>();
-				
 				sm.NextScene();
 			} catch {
 				print("not found scene manager...");
 			}
 		}
+
 		print(collider.gameObject.tag);
 	}
-
+*/
 	private void OnTriggerExit(Collider collider) {
 		if(collider.gameObject.CompareTag("Dash")) {
 			//speed = speedDefault;
@@ -119,8 +115,7 @@ public class Player : MonoBehaviour {
 		}
 		print(collider.gameObject.tag);
 	}
-
-	private void undoSpeed() {
+	public void UndoSpeed() {
 		speed = speedDefault;
 	}
 }
