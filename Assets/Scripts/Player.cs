@@ -95,8 +95,7 @@ public class Player : MonoBehaviour {
 		} catch {
 
 		}
-	}
-/*
+
 		// なんとなくこっちに次のシーンへ行く処理書いてしまったが、、、
 		// 後にGameSceneへ移行する
 		if(collider.gameObject.CompareTag("Finish")) {
@@ -118,10 +117,6 @@ public class Player : MonoBehaviour {
 		print(collider.gameObject.tag);
 	}
 
-
-		print(collider.gameObject.tag);
-	}
-*/
 	private void OnTriggerExit(Collider collider) {
 		if(collider.gameObject.CompareTag("Dash")) {
 			//speed = speedDefault;

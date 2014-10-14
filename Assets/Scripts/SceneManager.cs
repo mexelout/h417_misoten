@@ -14,6 +14,7 @@ public class SceneManager : MonoBehaviour {
 	void Start () {
 		instScene = (GameObject)Instantiate(titleScene);
 		current = titleScene;
+		FadeIn();
 	}
 	
 	// Update is called once per frame
@@ -22,21 +23,28 @@ public class SceneManager : MonoBehaviour {
 	}
 
 	public void NextScene() {
-		Object.Destroy(instScene);
-		if(current == titleScene) {
-			instScene = (GameObject)Instantiate(gameScene);
-			current = gameScene;
-			return;
-		}
-		if(current == gameScene) {
-			instScene = (GameObject)Instantiate(resultScene);
-			current = resultScene;
-			return;
-		}
-		if(current == resultScene) {
-			instScene = (GameObject)Instantiate(titleScene);
-			current = titleScene;
-			return;
-		}
+		CameraFade.Create().StartAlphaFade(Color.white, false, 2f, 0f, () => {
+			Object.Destroy(instScene);
+			FadeIn();
+			if(current == titleScene) {
+				instScene = (GameObject)Instantiate(gameScene);
+				current = gameScene;
+				return;
+			}
+			if(current == gameScene) {
+				instScene = (GameObject)Instantiate(resultScene);
+				current = resultScene;
+				return;
+			}
+			if(current == resultScene) {
+				instScene = (GameObject)Instantiate(titleScene);
+				current = titleScene;
+				return;
+			}
+		});
+	}
+
+	private void FadeIn() {
+		CameraFade.Create().StartAlphaFade(Color.white, true, 2f);
 	}
 }
