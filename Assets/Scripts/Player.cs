@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Player : MonoBehaviour {
@@ -82,27 +82,16 @@ public class Player : MonoBehaviour {
 		anm.SetBool(anmJumpHash, false);
 	}
 
-	private void OnCollisionExit(Collision collision) {
-		if(collision.gameObject.CompareTag("Building")) {
-			isOffBuilding = true;
-			Invoke("OffTheGroundLittle", 0.5f);
+	private void OnTriggerEnter(Collider collider) 
+	{
+		try {
+			SpecialFloor sf = collider.gameObject.GetComponent<SpecialFloor>();
+			sf.Execute(this);
+		} catch {
+
 		}
 	}
-
-	private void OnTriggerEnter(Collider collider) {
-		if(collider.gameObject.CompareTag("Dash")) {
-			speed = speedDefault * 1.5f;
-			// とりあえず3秒早い
-			Invoke("undoSpeed", 3);
-
-			FindObjectOfType<ScoreManager>().AddScore(100);
-		}
-
-		if(collider.gameObject.CompareTag("Bonus")) {
-			jumpPower = jumpPowerDefault * 5.5f;
-			FindObjectOfType<ScoreManager>().AddScore(100);
-		}
-
+/*
 		// なんとなくこっちに次のシーンへ行く処理書いてしまったが、、、
 		// 後にGameSceneへ移行する
 		if(collider.gameObject.CompareTag("Finish")) {
@@ -113,6 +102,7 @@ public class Player : MonoBehaviour {
 			} catch {
 				print("not found score manager");
 			}
+
 			try {
 				SceneManager sm = FindObjectOfType<SceneManager>();
 				sm.NextScene();
@@ -123,6 +113,10 @@ public class Player : MonoBehaviour {
 		print(collider.gameObject.tag);
 	}
 
+
+		print(collider.gameObject.tag);
+	}
+*/
 	private void OnTriggerExit(Collider collider) {
 		if(collider.gameObject.CompareTag("Dash")) {
 			//speed = speedDefault;
@@ -135,14 +129,14 @@ public class Player : MonoBehaviour {
 		print(collider.tag);
 	}
 
-	private void undoSpeed() {
-		speed = speedDefault;
-	}
-
 	private void OffTheGroundLittle() {
 		if(isOffBuilding) {
 			anm.SetBool(anmJumpHash, true);
 			isFly = true;
 		}
+	}
+
+	public void UndoSpeed() {
+		speed = speedDefault;
 	}
 }
