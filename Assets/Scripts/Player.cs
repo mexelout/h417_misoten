@@ -5,8 +5,12 @@ public class Player : MonoBehaviour {
 	public float speed;
 	public float speedDefault = 30;
 	public int lane;
+
+	// 飛んでる最中かどうかのフラグなのです！
+	public bool isFly;
+	private bool isOffBuilding;
+
 	private GameManager gm;
-    protected static SoundManager SoundDevice;  //サウンド再生用デバイス
 	private Animator anm;
 	private int anmSpeedHash;
 	private int anmJumpHash;
@@ -28,6 +32,7 @@ public class Player : MonoBehaviour {
 		jumpPower = jumpPowerDefault;
 		frameCount = 0;
 		isPlay = true;
+		isFly = false;
 	}
 
 	void Update() {
@@ -35,7 +40,7 @@ public class Player : MonoBehaviour {
 
 		float horizontal = Input.GetAxis("Horizontal");
 
-		if(gm.GetStartCount() > 0)
+		if(gm != null && gm.GetStartCount() > 0)
 			vertical *= 0;
 
 		transform.Translate(0, 0, vertical);
@@ -59,7 +64,7 @@ public class Player : MonoBehaviour {
 			}
 		}
 
-		if(gm.GetStartCount() > 0 && isPlay) {
+		if(gm != null && gm.GetStartCount() > 0 && isPlay) {
 			frameCount++;
 		}
 	}
@@ -68,10 +73,20 @@ public class Player : MonoBehaviour {
 		Vector3 dir = collision.gameObject.transform.up * -1;
 		transform.LookAt(dir + transform.position);
 		anm.SetBool(anmJumpHash, false);
+		isFly = false;
+		isOffBuilding = false;
+		CancelInvoke("OffTheGroundLittle");
 	}
 
 	private void OnCollisionStay(Collision collision) {
 		anm.SetBool(anmJumpHash, false);
+	}
+
+	private void OnCollisionExit(Collision collision) {
+		if(collision.gameObject.CompareTag("Building")) {
+			isOffBuilding = true;
+			Invoke("OffTheGroundLittle", 0.5f);
+		}
 	}
 
 	private void OnTriggerEnter(Collider collider) {
@@ -100,7 +115,6 @@ public class Player : MonoBehaviour {
 			}
 			try {
 				SceneManager sm = FindObjectOfType<SceneManager>();
-				
 				sm.NextScene();
 			} catch {
 				print("not found scene manager...");
@@ -117,10 +131,18 @@ public class Player : MonoBehaviour {
 		if(collider.gameObject.CompareTag("Bonus")) {
 			jumpPower = jumpPowerDefault;
 		}
-		print(collider.gameObject.tag);
+
+		print(collider.tag);
 	}
 
 	private void undoSpeed() {
 		speed = speedDefault;
+	}
+
+	private void OffTheGroundLittle() {
+		if(isOffBuilding) {
+			anm.SetBool(anmJumpHash, true);
+			isFly = true;
+		}
 	}
 }
