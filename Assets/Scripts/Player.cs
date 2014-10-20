@@ -6,7 +6,6 @@ public class Player : MonoBehaviour {
 	public float speedDefault = 30;
 	public int lane;
 	private GameManager gm;
-    protected static SoundManager SoundDevice;  //サウンド再生用デバイス
 	private Animator anm;
 	private int anmSpeedHash;
 	private int anmJumpHash;
