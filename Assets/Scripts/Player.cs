@@ -5,6 +5,11 @@ public class Player : MonoBehaviour {
 	public float speed;
 	public float speedDefault = 30;
 	public int lane;
+
+	// 飛んでる最中かどうかのフラグなのです！
+	public bool isFly;
+	private bool isOffBuilding;
+
 	private GameManager gm;
 	private Animator anm;
 	private int anmSpeedHash;
@@ -27,6 +32,7 @@ public class Player : MonoBehaviour {
 		jumpPower = jumpPowerDefault;
 		frameCount = 0;
 		isPlay = true;
+		isFly = false;
 	}
 
 	void Update() {
@@ -34,7 +40,7 @@ public class Player : MonoBehaviour {
 
 		float horizontal = Input.GetAxis("Horizontal");
 
-		if(gm.GetStartCount() > 0)
+		if(gm != null && gm.GetStartCount() > 0)
 			vertical *= 0;
 
 		transform.Translate(0, 0, vertical);
@@ -58,7 +64,7 @@ public class Player : MonoBehaviour {
 			}
 		}
 
-		if(gm.GetStartCount() > 0 && isPlay) {
+		if(gm != null && gm.GetStartCount() > 0 && isPlay) {
 			frameCount++;
 		}
 	}
@@ -67,24 +73,27 @@ public class Player : MonoBehaviour {
 		Vector3 dir = collision.gameObject.transform.up * -1;
 		transform.LookAt(dir + transform.position);
 		anm.SetBool(anmJumpHash, false);
+		isFly = false;
+		isOffBuilding = false;
+		CancelInvoke("OffTheGroundLittle");
 	}
 
 	private void OnCollisionStay(Collision collision) {
 		anm.SetBool(anmJumpHash, false);
 	}
 
-	private void OnTriggerEnter(Collider collider) {
-		if(collider.gameObject.CompareTag("Dash")) {
-			speed = speedDefault * 1.5f;
-			// とりあえず3秒早い
-			Invoke("undoSpeed", 3);
+	private void OnCollisionExit(Collision collision) {
+		Invoke("OffTheGroundLittle", 0.4f);
+		isOffBuilding = true;
+	}
 
-			FindObjectOfType<ScoreManager>().AddScore(100);
-		}
+	private void OnTriggerEnter(Collider collider) 
+	{
+		try {
+			SpecialFloor sf = collider.gameObject.GetComponent<SpecialFloor>();
+			sf.Execute(this);
+		} catch {
 
-		if(collider.gameObject.CompareTag("Bonus")) {
-			jumpPower = jumpPowerDefault * 5.5f;
-			FindObjectOfType<ScoreManager>().AddScore(100);
 		}
 
 		// なんとなくこっちに次のシーンへ行く処理書いてしまったが、、、
@@ -97,9 +106,9 @@ public class Player : MonoBehaviour {
 			} catch {
 				print("not found score manager");
 			}
+
 			try {
 				SceneManager sm = FindObjectOfType<SceneManager>();
-				
 				sm.NextScene();
 			} catch {
 				print("not found scene manager...");
@@ -116,10 +125,18 @@ public class Player : MonoBehaviour {
 		if(collider.gameObject.CompareTag("Bonus")) {
 			jumpPower = jumpPowerDefault;
 		}
-		print(collider.gameObject.tag);
+
+		print(collider.tag);
 	}
 
-	private void undoSpeed() {
+	private void OffTheGroundLittle() {
+		if(isOffBuilding) {
+			anm.SetBool(anmJumpHash, true);
+			isFly = true;
+		}
+	}
+
+	public void UndoSpeed() {
 		speed = speedDefault;
 	}
 }
