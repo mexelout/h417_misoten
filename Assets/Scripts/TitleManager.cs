@@ -18,6 +18,41 @@ public class TitleManager : MonoBehaviour {
 				sm.NextScene();
 			}
 		}
+
+		//============================== 以下、サウンドデバイスのテスト用 ==============================
+		SoundManager SoundDevice = GameObject.FindObjectOfType<SoundManager>();
+
+		//1キーで敵艦隊見ゆ
+		if(Input.GetKeyDown(KeyCode.Alpha1))
+		{
+			//通常再生
+			SoundDevice.PlayBGM(0, false);
+		}
+		//2キーで鉄底海峡
+		if(Input.GetKeyDown(KeyCode.Alpha2))
+		{
+			//通常再生
+			SoundDevice.PlayBGM(1, false);
+		}
+		//3キーで敵艦隊見ゆ(フェードイン)
+		if (Input.GetKeyDown(KeyCode.Alpha3))
+		{
+			//フェードイン再生
+			SoundDevice.PlayBGM(0, true);
+		}
+		//4キーで鉄底海峡(フェードイン)
+		if (Input.GetKeyDown(KeyCode.Alpha4))
+		{
+			//フェードイン再生
+			SoundDevice.PlayBGM(1, true);
+		}
+		//5キーでフェードアウト
+		if (Input.GetKeyDown(KeyCode.Alpha5))
+		{
+			//再生中BGMのフェードアウト
+			SoundDevice.StopBGM(true);
+		}
+		//============================== サウンドデバイステスト用ここまで ==============================
 	}
 
 	void FlashMessage() {

@@ -16,6 +16,7 @@
 //フィールド上に設置したSoundManager用GameObjectの位置と、プレイヤーの位置の距離によって、音量を変更しない場合は2D Sound、
 //距離によって音量の大小を表す場合は、3D Soundを設定する。
 //設定方法は、Soundフォルダ内にドロップした音楽データを選択して、インスペクタ内の3D Soundチェックボックスにチェックを付ける(3D) or 付けない(2D)
+//その後、右下にあるApplyボタンを押す。(3Dの場合はやる必要なし)
 //BGMは基本3D設定、SEは2D設定。Voiceは……使わないだろうしいいよね、たぶん2Dだけど。
 //
 //
@@ -32,7 +33,7 @@
 //10.StopVoice
 //11.StopAllVoice
 //
-//※※※※※ Updateメソッドにて、デフォルトのフェード速度を調整中(2014/10/15 13:00) ※※※※※
+//※※※※※ 最終更新 2014/10/20 12:10 ※※※※※
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 //==================== インポート ====================
@@ -54,9 +55,9 @@ public class SoundManager : MonoBehaviour
 {
 	//******************** 定数宣言 ********************
 	private static readonly int		DEVICE_NUMBER				= 16;				//再生デバイス数
-	private static readonly int		VOLUME_FADE_DEFALUT_SPEED	= 10;				//ボリュームフェードの標準速度
+	private static readonly int		VOLUME_FADE_DEFALUT_SPEED	= 5;				//ボリュームフェードの標準速度
 	private static readonly float	VOLUME_MAX					= 1.0f;				//最大ボリューム値
-	private static readonly float	VOLUME_FADE					= 0.01f;			//ボリュームフェードの減少値
+	private static readonly float	VOLUME_FADE					= 0.02f;			//ボリュームフェードの減少値
 	
 	//******************** メンバ変数宣言 ********************
 	//++++++++++ プライベート ++++++++++
@@ -149,14 +150,16 @@ public class SoundManager : MonoBehaviour
 			//設定されたフェード速度を超えた場合
 			else
 			{
-				BGM.fVolume += VOLUME_FADE;		//ボリュームを加算
-				nFadeCounter = 0;				//カウンターを初期化
+				BGM.fVolume += VOLUME_FADE;			//ボリュームを加算
+				BGM.Source.volume = BGM.fVolume;	//変更したボリュームを適応する
+				nFadeCounter = 0;					//カウンターを初期化
 
 				//ボリュームが1.0f(最大値)を超えた場合
 				if (BGM.fVolume >= VOLUME_MAX)
 				{
-					BGM.fVolume = VOLUME_MAX;		//ボリュームを最大値固定
-					BGM.bFadeIn = false;			//フェードイン終了
+					BGM.fVolume = VOLUME_MAX;			//ボリュームを最大値固定
+					BGM.Source.volume = BGM.fVolume;	//変更したボリュームを適応する
+					BGM.bFadeIn = false;				//フェードイン終了
 				}
 			}
 		}
@@ -172,14 +175,16 @@ public class SoundManager : MonoBehaviour
 			//設定されたフェード速度を超えた場合
 			else
 			{
-				BGM.fVolume -= VOLUME_FADE;		//ボリュームを減算
-				nFadeCounter = 0;				//カウンターを初期化
+				BGM.fVolume -= VOLUME_FADE;			//ボリュームを減算
+				BGM.Source.volume = BGM.fVolume;	//変更したボリュームを適応する
+				nFadeCounter = 0;					//カウンターを初期化
 
 				//ボリュームが0.0f(最低値)を超えた場合
 				if (BGM.fVolume <= 0.0f)
 				{
-					BGM.fVolume = 0.0f;				//ボリュームを最低値固定
-					BGM.bFadeOut = false;			//フェードアウト終了
+					BGM.fVolume = 0.0f;					//ボリュームを最低値固定
+					BGM.Source.volume = BGM.fVolume;	//変更したボリュームを適応する
+					BGM.bFadeOut = false;				//フェードアウト終了
 
 					//BGMを停止する
 					StopBGM(false);
@@ -280,8 +285,9 @@ public class SoundManager : MonoBehaviour
 		//フェードアウトフラグがONでは無い場合に、フェードインを可能にする
 		if(!(BGM.bFadeOut))
 		{
-			BGM.bFadeIn = true;		//フェードインフラグをONにする
-			BGM.fVolume = 0.0f;		//フェードインを行うにあたって、ボリュームを0から徐々に上げていく
+			BGM.bFadeIn = true;					//フェードインフラグをONにする
+			BGM.fVolume = 0.0f;					//フェードインを行うにあたって、ボリュームを0から徐々に上げていく
+			BGM.Source.volume = BGM.fVolume;	//変更したボリュームを適応する
 		}
 	}
 
