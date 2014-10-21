@@ -23,25 +23,27 @@ public class SceneManager : MonoBehaviour {
 	}
 
 	public void NextScene() {
-		CameraFade.Create().StartAlphaFade(Color.white, false, 2f, 0f, () => {
-			Object.Destroy(instScene);
-			FadeIn();
-			if(current == titleScene) {
-				instScene = (GameObject)Instantiate(gameScene);
-				current = gameScene;
-				return;
-			}
-			if(current == gameScene) {
-				instScene = (GameObject)Instantiate(resultScene);
-				current = resultScene;
-				return;
-			}
-			if(current == resultScene) {
-				instScene = (GameObject)Instantiate(titleScene);
-				current = titleScene;
-				return;
-			}
-		});
+		if(FindObjectOfType<CameraFade>() == null) {
+			CameraFade.Create().StartAlphaFade(Color.white, false, 2f, 0f, () => {
+				Object.Destroy(instScene);
+				FadeIn();
+				if(current == titleScene) {
+					instScene = (GameObject)Instantiate(gameScene);
+					current = gameScene;
+					return;
+				}
+				if(current == gameScene) {
+					instScene = (GameObject)Instantiate(resultScene);
+					current = resultScene;
+					return;
+				}
+				if(current == resultScene) {
+					instScene = (GameObject)Instantiate(titleScene);
+					current = titleScene;
+					return;
+				}
+			});
+		}
 	}
 
 	private void FadeIn() {
