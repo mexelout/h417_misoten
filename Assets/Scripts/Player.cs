@@ -18,7 +18,7 @@ public class Player : MonoBehaviour {
 	public float jumpPowerDefault = 100;
 
 	// フィニッシュの処理をここに書いているのでここでカウント(ゲームマネージャに後で移行)
-	private int frameCount;
+	public int frameCount;
 	private bool isPlay;
 
 	void Start() {
@@ -95,28 +95,8 @@ public class Player : MonoBehaviour {
 		} catch {
 
 		}
-
-		// なんとなくこっちに次のシーンへ行く処理書いてしまったが、、、
-		// 後にGameSceneへ移行する
-		if(collider.gameObject.CompareTag("Finish")) {
-			try {
-				ScoreManager sm = FindObjectOfType<ScoreManager>();
-				int addScore = (frameCount > 200) ? 500 : 500 - (frameCount - 200) * 2;
-				sm.AddScore(addScore);
-			} catch {
-				print("not found score manager");
-			}
-
-			try {
-				SceneManager sm = FindObjectOfType<SceneManager>();
-				sm.NextScene();
-			} catch {
-				print("not found scene manager...");
-			}
-		}
-		print(collider.gameObject.tag);
 	}
-
+	
 	private void OnTriggerExit(Collider collider) {
 		if(collider.gameObject.CompareTag("Dash")) {
 			//speed = speedDefault;
