@@ -4,7 +4,7 @@ using System.Collections;
 public class Player : MonoBehaviour {
 	public float speed;
 	public float speedDefault = 30;
-	public int lane;
+	public int lane = 1;
 
 	// 飛んでる最中かどうかのフラグなのです！
 	public bool isFly;
@@ -20,6 +20,9 @@ public class Player : MonoBehaviour {
 	// フィニッシュの処理をここに書いているのでここでカウント(ゲームマネージャに後で移行)
 	public int frameCount;
 	private bool isPlay;
+
+	// Next RoadJoint
+	public RoadJoint roadJoint;
 
 	void Start() {
 		gm = GameObject.FindObjectOfType<GameManager>();
@@ -52,17 +55,13 @@ public class Player : MonoBehaviour {
 			rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 		}
 
-		if(horizontal > 0) {
-			if(lane == 0) {
-				lane++;
-				transform.position += transform.right * 3;
-			}
-		} else if(horizontal < 0) {
-			if(lane == 1) {
-				lane--;
-				transform.position += transform.right * -3;
-			}
+		if(horizontal < 0) {
+			lane -= (lane > 0) ? 1 : 0;
+		} else if(horizontal > 0) {
+			lane += (lane < 2) ? 1 : 0;
 		}
+
+		gameObject.transform.LookAt(roadJoint.transform);
 
 		if(gm != null && gm.GetStartCount() > 0 && isPlay) {
 			frameCount++;
@@ -70,8 +69,6 @@ public class Player : MonoBehaviour {
 	}
 
 	private void OnCollisionEnter(Collision collision) {
-		Vector3 dir = collision.gameObject.transform.up * -1;
-		transform.LookAt(dir + transform.position);
 		anm.SetBool(anmJumpHash, false);
 		isFly = false;
 		isOffBuilding = false;
@@ -92,8 +89,16 @@ public class Player : MonoBehaviour {
 		try {
 			SpecialFloor sf = collider.gameObject.GetComponent<SpecialFloor>();
 			sf.Execute(this);
+			return;
 		} catch {
-
+			print("not special floor");
+		}
+		try {
+			RoadJoint rj = collider.gameObject.GetComponent<RoadJoint>();
+			roadJoint = rj.nextJoint.GetComponent<RoadJoint>();
+			return;
+		} catch {
+			print("not road joint");
 		}
 	}
 	
