@@ -46,8 +46,8 @@ struct SoundStructure
 	public AudioSource	Source;				//再生デバイス(リソース)
 	public int			nVolumeFadeSpeed;	//ボリュームフェードの速さ
 	public float		fVolume;			//再生ボリューム
-	public bool			bFadeIn;			//フェードインフラグ
-	public bool			bFadeOut;			//フェードアウトフラグ
+	public bool			bFadeIn;			//フェードインフラグ【true：フェードインする　false：フェードインしない】
+	public bool			bFadeOut;			//フェードアウトフラグ【true：フェードアウトする　false：フェードアウトしない】
 }
 
 //==================== サウンドマネージャークラス ====================
@@ -239,7 +239,7 @@ public class SoundManager : MonoBehaviour
 			else if (BGM.Source.clip == BGMData[nPlayNumber])
 			{
 				//エラーログ出力 - 同じBGMが既に再生されている
-				Debug.Log("(BGM)指定された再生番号は既に再生中です。");
+				Debug.Log("(BGM)指定された再生番号は既に再生中です。 再生番号：" + nPlayNumber);
 			}
 			else
 			{
