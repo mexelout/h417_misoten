@@ -3,13 +3,56 @@ using System.Collections;
 
 public class RoadJoint : MonoBehaviour {
 
-	public GameObject prevJoint;
-	public GameObject nextJoint;
-	public int number;
+	public GameObject prevJoint {
+		get;
+		private set;
+	}
+
+	public GameObject nextJoint {
+		get;
+		private set;
+	}
+
+	public Hashtable sideJoint {
+		get;
+		private set;
+	}
+
+	[SerializeField]
+	private GameObject _specialCamera;
+	public GameObject specialCamera {
+		get { return _specialCamera; }
+		private set { _specialCamera = value; }
+	}
+
+	public int orderNumber;
+	public int laneNumber;
+
+	void Awake() {
+		char[] n = name.ToCharArray();
+		orderNumber = int.Parse(("" + n[n.Length-3] + n[n.Length - 2]).ToString());
+		laneNumber = int.Parse(n[n.Length - 1].ToString());
+	}
 
 	// Use this for initialization
 	void Start () {
-	
+		sideJoint = new Hashtable();
+		foreach(RoadJoint rj in GameObject.FindObjectsOfType<RoadJoint>()) {
+			if(rj.laneNumber == this.laneNumber) {
+				if(rj.orderNumber == (this.orderNumber + 1)) {
+					nextJoint = rj.gameObject;
+				} else if(rj.orderNumber == (this.orderNumber - 1)) {
+					prevJoint = rj.gameObject;
+				}
+			}
+			if(rj.orderNumber == this.orderNumber) {
+				if(rj.laneNumber == this.laneNumber - 1) {
+					sideJoint["left"] = rj;
+				} else if(rj.laneNumber == this.laneNumber + 1) {
+					sideJoint["right"] = rj;
+				}
+			}
+		}
 	}
 	
 	// Update is called once per frame
