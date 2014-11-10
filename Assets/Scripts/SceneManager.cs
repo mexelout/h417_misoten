@@ -4,6 +4,7 @@ using System.Collections;
 public class SceneManager : MonoBehaviour {
 
 	public GameObject titleScene;
+	public GameObject tutorialScene;
 	public GameObject gameScene;
 	public GameObject resultScene;
 
@@ -28,6 +29,11 @@ public class SceneManager : MonoBehaviour {
 				Object.Destroy(instScene);
 				FadeIn();
 				if(current == titleScene) {
+					instScene = (GameObject)Instantiate(tutorialScene);
+					current = tutorialScene;
+					return;
+				}
+				if(current == tutorialScene) {
 					instScene = (GameObject)Instantiate(gameScene);
 					current = gameScene;
 					return;

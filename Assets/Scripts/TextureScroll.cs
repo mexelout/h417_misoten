@@ -12,8 +12,8 @@ public class TextureScroll : MonoBehaviour
 	//++++++++++ プライベート ++++++++++
 	private bool	fDelayVerticalFlag		= false;					//縦方向スクロール停止までの遅延管理フラグ【true：遅延中　false：通常処理】
 	private bool	fDelayHorizontalFlag	= false;					//横方向スクロール停止までの遅延管理フラグ【true：遅延中　false：通常処理】
-	private Vector2 Offset					= new Vector2(0, 0);		//	
-	private Vector2	OldOffset				= new Vector2(0.0f, 0.0f);	//前回のオフセット値を保存する
+	private Vector2 Offset					= new Vector2(0, 0);		//現在のオフセット値を保存する
+	private Vector2	OldOffset				= new Vector2(0.0f , 0.0f);	//前回のオフセット値を保存する
 
 	//++++++++++ プロテクト ++++++++++
 
