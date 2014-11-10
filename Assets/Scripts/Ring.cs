@@ -3,9 +3,10 @@ using System.Collections;//System.CollectionsはC#を利用する上で便利な
 
 public class Ring : SpecialFloor {
 
+	public GameObject particleAddScore;
 	// Use this for initialization
 	void Start () {
-	
+		
 	}
 	
 	// Update is called once per frame
@@ -15,6 +16,7 @@ public class Ring : SpecialFloor {
 
 	public override void Execute(Player player)
 	{
+		Instantiate(particleAddScore);	// エフェクト（particleAddScore）を呼び出す
 		FindObjectOfType<ScoreManager>().AddScore(500);
 		Destroy(gameObject); // gameobject delete
 	}
