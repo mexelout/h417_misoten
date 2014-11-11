@@ -124,7 +124,8 @@ public class Player : MonoBehaviour {
 		}
 		try {
 			RoadJoint rj = collider.gameObject.GetComponent<RoadJoint>();
-			roadJoint = rj.nextJoint.GetComponent<RoadJoint>();
+			if(rj.laneNumber == roadNumber)
+				roadJoint = rj.nextJoint.GetComponent<RoadJoint>();
 			return;
 		} catch {
 			roadJoint = null;

@@ -16,8 +16,11 @@ public class Dash : SpecialFloor {
 	public override void Execute(Player player)
 	{
 		player.speed = player.speedDefault * 1.5f;
-		Invoke("UndoSpeed",3);
-		FindObjectOfType<ScoreManager>().AddScore(100);
+		player.Invoke("UndoSpeed", 3);
+		try {
+			FindObjectOfType<ScoreManager>().AddScore(100);
+		} catch {
+		}
 	}
 
 }
