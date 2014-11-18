@@ -29,8 +29,10 @@ public class SceneManager : MonoBehaviour {
 				Object.Destroy(instScene);
 				FadeIn();
 				if(current == titleScene) {
-					instScene = (GameObject)Instantiate(tutorialScene);
-					current = tutorialScene;
+					//instScene = (GameObject)Instantiate(tutorialScene);
+					//current = tutorialScene;
+					instScene = Instantiate(gameScene) as GameObject;
+					current = gameScene;
 					return;
 				}
 				if(current == tutorialScene) {
