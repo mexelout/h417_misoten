@@ -184,6 +184,7 @@ public class Player : MonoBehaviour {
 			roadJoint = null;
 			//print("not road joint");
 		}
+
 	}
 	
 	private void OnTriggerExit(Collider collider) {
