@@ -28,31 +28,35 @@ public class SceneManager : MonoBehaviour {
 			CameraFade.Create().StartAlphaFade(Color.white, false, 2f, 0f, () => {
 				Object.Destroy(instScene);
 				FadeIn();
-				if(current == titleScene) {
-					instScene = (GameObject)Instantiate(tutorialScene);
-					current = tutorialScene;
-					return;
-				}
-				if(current == tutorialScene) {
-					instScene = (GameObject)Instantiate(gameScene);
-					current = gameScene;
-					return;
-				}
-				if(current == gameScene) {
-					instScene = (GameObject)Instantiate(resultScene);
-					current = resultScene;
-					return;
-				}
-				if(current == resultScene) {
-					instScene = (GameObject)Instantiate(titleScene);
-					current = titleScene;
-					return;
-				}
+				Invoke("RateSetScene", 0.25f);
 			});
 		}
 	}
 
 	private void FadeIn() {
-		CameraFade.Create().StartAlphaFade(Color.white, true, 2f);
+		CameraFade.Create().StartAlphaFade(Color.white, true, 2f, 0.25f);
+	}
+
+	private void RateSetScene() {
+		if(current == titleScene) {
+			instScene = (GameObject)Instantiate(tutorialScene);
+			current = tutorialScene;
+			return;
+		}
+		if(current == tutorialScene) {
+			instScene = (GameObject)Instantiate(gameScene);
+			current = gameScene;
+			return;
+		}
+		if(current == gameScene) {
+			instScene = (GameObject)Instantiate(resultScene);
+			current = resultScene;
+			return;
+		}
+		if(current == resultScene) {
+			instScene = (GameObject)Instantiate(titleScene);
+			current = titleScene;
+			return;
+		}
 	}
 }

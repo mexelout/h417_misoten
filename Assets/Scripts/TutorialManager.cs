@@ -2,19 +2,38 @@
 using System.Collections;
 
 public class TutorialManager : MonoBehaviour {
+	public GUIText[] g;
+
+	public int i;
 	// Use this for initialization
 	void Start () {
-		SoundManager SoundDevice = GameObject.FindObjectOfType<SoundManager>();
-		SoundDevice.PlayBGM(0 , false);
+		g = FindObjectsOfType<GUIText>(); 
+
+		try {
+			SoundManager SoundDevice = GameObject.FindObjectOfType<SoundManager>();
+			SoundDevice.PlayBGM(0 , false);
+		} catch {
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-				if (Input.GetButton ("Start")) {
-					SceneManager sm = GameObject.FindObjectOfType<SceneManager> ();
-					if (sm != null) {
+		i++;
+		if (Input.GetButton ("Start")) {
+				SceneManager sm = GameObject.FindObjectOfType<SceneManager> ();
+				if (sm != null) {
 						sm.NextScene ();
-					}
+				}
+		}
+		if (i == 360) {
+			try {
+				if (g [0].text != "tutorial" || g [1].text != "test")
+					g [0].text = "tutorial";
+					g [1].text = "test";
+
+			} catch {
+					print ("not found...");
 			}
+		}
 	}
 }
