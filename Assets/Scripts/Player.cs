@@ -19,6 +19,17 @@ public class Player : MonoBehaviour {
 	public float jumpPower;
 	public float jumpPowerDefault = 100;
 
+	// BoundsJoint関連
+	public Vector3 p = new Vector3(0.0f,0.0f,0.0f);
+	public Vector3 p0 =new  Vector3(0.0f,0.0f,0.0f);
+	public Vector3 p1 =new  Vector3(0.0f,0.0f,0.0f);
+	public Vector3 p2 =new  Vector3(0.0f,0.0f,0.0f);
+	public Vector3 p3 =new  Vector3(0.0f,0.0f,0.0f);
+
+	public Bezier myBezier;
+	public float t = 0f;
+
+
 	// フィニッシュの処理をここに書いているのでここでカウント(ゲームマネージャに後で移行)
 	public int frameCount;
 	private bool isPlay;
@@ -42,6 +53,8 @@ public class Player : MonoBehaviour {
 		frameCount = 0;
 		isPlay = true;
 		isFly = false;
+
+
 	}
 
 	void Update() {
@@ -56,7 +69,23 @@ public class Player : MonoBehaviour {
 		if(gm != null && gm.GetStartCount() > 0)
 			vertical *= 0;
 
-		transform.Translate(0, 0, vertical);
+		if(roadJoint.name.Contains("Parabola"))
+		{
+			Vector3 vec = myBezier.GetPointAtTime( t );
+			Vector3 dis = roadJoint.transform.position - roadJoint.prevJoint.transform.position;
+			vec.x = roadJoint.prevJoint.transform.position.x + dis.x * t;
+			vec.z = roadJoint.prevJoint.transform.position.z + dis.z * t;
+			transform.position = vec;
+			t += 0.005f;
+			if( t > 1f )
+				t = 0f;
+	
+			//print("test");
+		}
+		else
+		{
+			transform.Translate(0, 0, vertical);
+		}
 
 		anm.SetFloat(anmSpeedHash, vertical);
 
@@ -83,9 +112,10 @@ public class Player : MonoBehaviour {
 			isChangeRoadNumber = false;
 		}
 
-		if(roadJoint.name.Contains("Jump")) {
+		if(roadJoint.name.Contains("Jump") || roadJoint.name.Contains("Parabola")) {
 			rigidbody.useGravity = false;
 			anm.SetBool(anmJumpHash, true);
+
 		} else {
 			rigidbody.useGravity = true;
 		}
@@ -124,8 +154,31 @@ public class Player : MonoBehaviour {
 		}
 		try {
 			RoadJoint rj = collider.gameObject.GetComponent<RoadJoint>();
-			if(rj.laneNumber == roadNumber)
+			if(rj.laneNumber == roadNumber){
 				roadJoint = rj.nextJoint.GetComponent<RoadJoint>();
+			}
+			if(roadJoint.name.Contains("Parabola")) {
+				t = 0;
+				rigidbody.velocity = new Vector3(0, 0, 0);
+				//	p0 = roadJoint.prevJoint.transform.position;
+				p0 = roadJoint.prevJoint.transform.position;	
+				p3 = roadJoint.transform.position;
+				p0 = new Vector3(p0.x, p0.y, p0.z);
+				p3 = new Vector3(p3.x, p3.y, p3.z);
+
+				float dis = Vector3.Distance(p0,p3);
+				roadJoint.prevJoint.transform.LookAt(roadJoint.transform);
+				Vector3 up = roadJoint.prevJoint.transform.up;
+				p1 = (( p3 - p0 ) / 2) + p0;// 2tennno tyuusinntenn
+				p1 = p1 +( up * dis);
+
+				myBezier = new Bezier( p0,p1,p2,p3);
+				Debug.Log(p0);
+				Debug.Log(p1);
+				Debug.Log(p2);
+				Debug.Log(p3);
+				print("in jumpJoint");
+			}
 			return;
 		} catch {
 			roadJoint = null;
@@ -157,7 +210,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void TargetLock() {
-		if(roadJoint.name.Contains("Road")) {
+		if(roadJoint.name.Contains("Road") || roadJoint.name.Contains("Parabola")) {
 			// トランスフォームはクローンができないのでそのまま
 			Transform t = roadJoint.transform;
 			Vector3 lockAt = t.position;
@@ -168,7 +221,7 @@ public class Player : MonoBehaviour {
 			// 同じ座標を参照いている為、元に戻してやらないと高さが初期プレイヤー高度と同じになる
 			lockAt.y = y;
 			t.position = lockAt;
-		} else {
+		} else if(roadJoint.name.Contains("Jump")) {
 			transform.LookAt(roadJoint.transform);
 		}
 
