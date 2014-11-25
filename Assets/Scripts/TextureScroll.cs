@@ -10,10 +10,10 @@ public class TextureScroll : MonoBehaviour
 	
 	//******************** メンバ変数宣言 ********************
 	//++++++++++ プライベート ++++++++++
-	private bool	fDelayVerticalFlag		= false;					//縦方向スクロール停止までの遅延管理フラグ【true：遅延中　false：通常処理】
-	private bool	fDelayHorizontalFlag	= false;					//横方向スクロール停止までの遅延管理フラグ【true：遅延中　false：通常処理】
-	private Vector2 Offset					= new Vector2(0, 0);		//現在のオフセット値を保存する
-	private Vector2	OldOffset				= new Vector2(0.0f , 0.0f);	//前回のオフセット値を保存する
+	private bool	fDelayVerticalFlag		= false;						//縦方向スクロール停止までの遅延管理フラグ【true：遅延中　false：通常処理】
+	private bool	fDelayHorizontalFlag	= false;						//横方向スクロール停止までの遅延管理フラグ【true：遅延中　false：通常処理】
+	private Vector2 Offset					= new Vector2(0.0f , 0.0f);		//現在のオフセット値を保存する
+	private Vector2	OldOffset				= new Vector2(0.0f , 0.0f);		//前回のオフセット値を保存する
 
 	//++++++++++ プロテクト ++++++++++
 
@@ -32,6 +32,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：Start
 	//役割			：実行時に呼び出されるメソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	void Start()
@@ -43,6 +44,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：Update
 	//役割			：更新メソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	void Update()
@@ -51,8 +53,8 @@ public class TextureScroll : MonoBehaviour
 		if(!(bScrollTypeFlag))
 		{
 			//******************** 変数宣言 ********************
-			Vector2 OffsetBuffer	= new Vector2(0, 0);		//テクスチャオフセット値格納用
-			Vector2 Size			= new Vector2(0, 0);		//テクスチャサイズ値格納用
+			Vector2 OffsetBuffer	= new Vector2(0.0f , 0.0f);		//テクスチャオフセット値格納用
+			Vector2 Size			= new Vector2(0.0f , 0.0f);		//テクスチャサイズ値格納用
 
 			//******************** 以下、UV座標値計算 ********************
 			//縦方向スクロール実行フラグがtrueの場合、縦方向のスクロールを実行する
@@ -133,8 +135,8 @@ public class TextureScroll : MonoBehaviour
 			}
 
 			//サイズ値を算出
-			Size.x = (float)(1.0f / nHorizontalAnimationNumber);
-			Size.y = (float)(1.0f / nVerticalAnimationNumber);
+			Size.x = (float)(1.0f / nHorizontalAnimationNumber);		//x軸
+			Size.y = (float)(1.0f / nVerticalAnimationNumber);			//y軸
 
 			//マテリアルにオフセットを設定する
 			this.renderer.material.SetTextureOffset("_MainTex", OffsetBuffer);
@@ -150,6 +152,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：UpdateTextureScroll
 	//役割			：テクスチャ更新メソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void UpdateTextureScroll()
@@ -170,8 +173,8 @@ public class TextureScroll : MonoBehaviour
 		}
 
 		//サイズ値を算出
-		Size.x = (float)(1.0f / nHorizontalAnimationNumber);
-		Size.y = (float)(1.0f / nVerticalAnimationNumber);
+		Size.x = (float)(1.0f / nHorizontalAnimationNumber);		//x軸
+		Size.y = (float)(1.0f / nVerticalAnimationNumber);			//y軸
 	
 		//マテリアルにオフセットを設定する
 		this.renderer.material.SetTextureOffset("_MainTex" , Offset);
@@ -183,6 +186,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：SetScrollSpeed
 	//役割			：スクロール速度設定メソッド
 	//引数			：(float fSpeed)	設定するスクロールの速度
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void SetScrollSpeed(float fSpeed)
@@ -195,6 +199,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：SetVerticalExecutionFlag
 	//役割			：縦方向スクロール実行フラグ設定メソッド
 	//引数			：(bool bVerticalExecution)		設定するスクロール実行フラグ【true：スクロール実行　false：スクロールしない】
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void SetVerticalExecutionFlag(bool bVerticalExecution)
@@ -207,6 +212,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：SetHorizontalExecutionFlag
 	//役割			：横方向スクロール実行フラグ設定メソッド
 	//引数			：(bool bHorizontalExecution)		設定するスクロール実行フラグ【true：スクロール実行　false：スクロールしない】
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void SetHorizontalExecutionFlag(bool bHorizontalExecution)
@@ -219,6 +225,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：SetVerticalScrollFlag
 	//役割			：縦方向スクロール制御フラグ設定メソッド
 	//引数			：(bool bVerticalFlag)		設定する縦方向制御フラグ【true：上方向にテクスチャが移動　false：下方向にテクスチャが移動】
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void SetVerticalScrollFlag(bool bVerticalFlag)
@@ -231,6 +238,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：SetHorizontalScrollFlag
 	//役割			：横方向スクロール制御フラグ設定メソッド
 	//引数			：(bool bHorizontalFlag)	設定する横方向制御フラグ【true：左方向にテクスチャが移動　false：右方向にテクスチャが移動】
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void SetHorizontalScrollFlag(bool bHorizontalFlag)
@@ -244,6 +252,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：GetVerticalExecutionFlag
 	//役割			：縦方向スクロール実行フラグ取得メソッド
 	//引数			：void
+	//戻り値		：(bool型)		縦方向スクロール実行フラグ
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public bool GetVerticalExecutionFlag()
@@ -256,6 +265,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：GetHorizontalExecutionFlag
 	//役割			：横方向スクロール実行フラグ取得メソッド
 	//引数			：void
+	//戻り値		：(bool型)		横方向スクロール実行フラグ
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public bool GetHorizontalExecutionFlag()
@@ -268,6 +278,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：GetVerticalScrollFlag
 	//役割			：縦方向スクロール制御フラグ取得メソッド
 	//引数			：void
+	//戻り値		：(bool型)		縦方向スクロール制御フラグ
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public bool SetVerticalScrollFlag()
@@ -280,6 +291,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：GetHorizontalScrollFlag
 	//役割			：横方向スクロール制御フラグ取得メソッド
 	//引数			：void
+	//戻り値		：(bool型)		横方向スクロール制御フラグ
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public bool SetHorizontalScrollFlag()
@@ -293,6 +305,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：StopVerticalExecutionFlag
 	//役割			：縦方向スクロール停止メソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void StopVerticalExecutionFlag()
@@ -309,6 +322,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：StopHorizontalExecutionFlag
 	//役割			：横方向スクロール停止メソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void StopHorizontalExecutionFlag()
@@ -326,6 +340,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：ReverseRepeatFlag
 	//役割			：スクロール種類フラグ反転メソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void ReverseRepeatFlag()
@@ -352,6 +367,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：ReverseVerticalExecutionFlag
 	//役割			：縦方向スクロール実行フラグ反転メソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void ReverseVerticalExecutionFlag()
@@ -364,6 +380,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：ReverseHorizontalExecutionFlag
 	//役割			：横方向スクロール実行フラグ反転メソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void ReverseHorizontalExecutionFlag()
@@ -376,6 +393,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：ReverseVerticalScrollFlag
 	//役割			：縦方向スクロール制御フラグ反転メソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void ReverseVerticalScrollFlag()
@@ -388,6 +406,7 @@ public class TextureScroll : MonoBehaviour
 	//メソッド名	：ReverseHorizontalScrollFlag
 	//役割			：横方向スクロール制御フラグ反転メソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void ReverseHorizontalScrollFlag()

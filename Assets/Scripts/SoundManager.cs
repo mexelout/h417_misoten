@@ -33,38 +33,25 @@
 //10.StopVoice
 //11.StopAllVoice
 //
-//※※※※※ 最終更新 2014/10/20 12:10 ※※※※※
+//※※※※※ 最終更新 2014/11/11 12:20 ※※※※※
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 //==================== インポート ====================
 using UnityEngine;
 using System.Collections;
-
-//==================== サウンド構造体 ====================
-struct SoundStructure
-{
-	public AudioSource	Source;				//再生デバイス(リソース)
-	public int			nVolumeFadeSpeed;	//ボリュームフェードの速さ
-	public float		fVolume;			//再生ボリューム
-	public bool			bFadeIn;			//フェードインフラグ【true：フェードインする　false：フェードインしない】
-	public bool			bFadeOut;			//フェードアウトフラグ【true：フェードアウトする　false：フェードアウトしない】
-}
+using CommonSound;
 
 //==================== サウンドマネージャークラス ====================
 public class SoundManager : MonoBehaviour
 {
 	//******************** 定数宣言 ********************
-	private static readonly int		DEVICE_NUMBER				= 16;				//再生デバイス数
-	private static readonly int		VOLUME_FADE_DEFALUT_SPEED	= 5;				//ボリュームフェードの標準速度
-	private static readonly float	VOLUME_MAX					= 1.0f;				//最大ボリューム値
-	private static readonly float	VOLUME_FADE					= 0.02f;			//ボリュームフェードの減少値
 	
 	//******************** メンバ変数宣言 ********************
 	//++++++++++ プライベート ++++++++++
-	private SoundStructure		BGM;												//BGM用サウンドまとめ
-	private SoundStructure[]	SE		= new SoundStructure[DEVICE_NUMBER];		//SE用サウンドまとめ
-	private SoundStructure[]	Voice	= new SoundStructure[DEVICE_NUMBER];		//Voice用サウンドまとめ
-	private int					nFadeCounter;										//フェード時に使用するカウンター
+	private SoundStructure		BGM;															//BGM用サウンドまとめ
+	private SoundStructure[]	SE		= new SoundStructure[ConstantScore.DEVICE_NUMBER];		//SE用サウンドまとめ
+	private SoundStructure[]	Voice	= new SoundStructure[ConstantScore.DEVICE_NUMBER];		//Voice用サウンドまとめ
+	private int					nFadeCounter;													//フェード時に使用するカウンター
 	
 	//++++++++++ プロテクト ++++++++++
 	
@@ -77,6 +64,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：Awake
 	//役割			：コンストラクタ的な
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	void Awake()
@@ -85,8 +73,8 @@ public class SoundManager : MonoBehaviour
 		BGM.Source				= gameObject.AddComponent<AudioSource>();		//BGM再生デバイスを取得
 		BGM.Source.loop			= true;											//BGM再生デバイスにループ設定ON
 		BGM.Source.clip			= null;											//再生BGM情報をnull設定
-		BGM.nVolumeFadeSpeed	= VOLUME_FADE_DEFALUT_SPEED;					//フェード速度初期化
-		BGM.fVolume				= VOLUME_MAX;									//BGM再生ボリューム初期化
+		BGM.nVolumeFadeSpeed	= ConstantScore.VOLUME_FADE_DEFALUT_SPEED;		//フェード速度初期化
+		BGM.fVolume				= ConstantScore.VOLUME_MAX;						//BGM再生ボリューム初期化
 		BGM.bFadeIn				= false;										//BGMフェードインフラグ初期化
 		BGM.bFadeOut			= false;										//BGMフェードアウトフラグ初期化
 		
@@ -96,8 +84,8 @@ public class SoundManager : MonoBehaviour
 			SE[nLoop].Source			= gameObject.AddComponent<AudioSource>();			//SE登録配列毎に、SEを取得してSE再生デバイスに割り当てる
 			SE[nLoop].Source.loop		= false;											//SE再生デバイスにループ設定OFF
 			SE[nLoop].Source.clip		= null;												//再生SE情報をnull設定
-			SE[nLoop].nVolumeFadeSpeed	= VOLUME_FADE_DEFALUT_SPEED;						//フェード速度初期化
-			SE[nLoop].fVolume			= VOLUME_MAX;										//SE再生ボリューム初期化
+			SE[nLoop].nVolumeFadeSpeed	= ConstantScore.VOLUME_FADE_DEFALUT_SPEED;			//フェード速度初期化
+			SE[nLoop].fVolume			= ConstantScore.VOLUME_MAX;							//SE再生ボリューム初期化
 			SE[nLoop].bFadeIn			= false;											//SEフェードインフラグ初期化
 			SE[nLoop].bFadeOut			= false;											//SEフェードアウトフラグ初期化
 		}
@@ -108,8 +96,8 @@ public class SoundManager : MonoBehaviour
 			Voice[nLoop].Source				= gameObject.AddComponent<AudioSource>();		//Voice登録配列毎に、Voiceを取得してVoice再生デバイスに割り当てる
 			Voice[nLoop].Source.loop		= false;										//Voice再生デバイスにループ設定OFF
 			Voice[nLoop].Source.clip		= null;											//再生SE情報をnull設定
-			Voice[nLoop].nVolumeFadeSpeed	= VOLUME_FADE_DEFALUT_SPEED;					//フェード速度初期化
-			Voice[nLoop].fVolume			= VOLUME_MAX;									//Voice再生ボリューム初期化
+			Voice[nLoop].nVolumeFadeSpeed	= ConstantScore.VOLUME_FADE_DEFALUT_SPEED;		//フェード速度初期化
+			Voice[nLoop].fVolume			= ConstantScore.VOLUME_MAX;						//Voice再生ボリューム初期化
 			Voice[nLoop].bFadeIn			= false;										//Voiceフェードインフラグ初期化
 			Voice[nLoop].bFadeOut			= false;										//Voiceフェードアウトフラグ初期化
 		}
@@ -122,6 +110,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：Start
 	//役割			：実行時に呼び出されるメソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	void Start()
@@ -133,6 +122,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：Update
 	//役割			：更新メソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	void Update()
@@ -150,16 +140,16 @@ public class SoundManager : MonoBehaviour
 			//設定されたフェード速度を超えた場合
 			else
 			{
-				BGM.fVolume += VOLUME_FADE;			//ボリュームを加算
-				BGM.Source.volume = BGM.fVolume;	//変更したボリュームを適応する
-				nFadeCounter = 0;					//カウンターを初期化
+				BGM.fVolume += ConstantScore.VOLUME_FADE;		//ボリュームを加算
+				BGM.Source.volume	= BGM.fVolume;				//変更したボリュームを適応する
+				nFadeCounter		= 0;						//カウンターを初期化
 
 				//ボリュームが1.0f(最大値)を超えた場合
-				if (BGM.fVolume >= VOLUME_MAX)
+				if (BGM.fVolume >= ConstantScore.VOLUME_MAX)
 				{
-					BGM.fVolume = VOLUME_MAX;			//ボリュームを最大値固定
-					BGM.Source.volume = BGM.fVolume;	//変更したボリュームを適応する
-					BGM.bFadeIn = false;				//フェードイン終了
+					BGM.fVolume			= ConstantScore.VOLUME_MAX;		//ボリュームを最大値固定
+					BGM.Source.volume	= BGM.fVolume;					//変更したボリュームを適応する
+					BGM.bFadeIn			= false;						//フェードイン終了
 				}
 			}
 		}
@@ -175,16 +165,16 @@ public class SoundManager : MonoBehaviour
 			//設定されたフェード速度を超えた場合
 			else
 			{
-				BGM.fVolume -= VOLUME_FADE;			//ボリュームを減算
-				BGM.Source.volume = BGM.fVolume;	//変更したボリュームを適応する
-				nFadeCounter = 0;					//カウンターを初期化
+				BGM.fVolume -= ConstantScore.VOLUME_FADE;	//ボリュームを減算
+				BGM.Source.volume	= BGM.fVolume;			//変更したボリュームを適応する
+				nFadeCounter		= 0;					//カウンターを初期化
 
 				//ボリュームが0.0f(最低値)を超えた場合
 				if (BGM.fVolume <= 0.0f)
 				{
-					BGM.fVolume = 0.0f;					//ボリュームを最低値固定
-					BGM.Source.volume = BGM.fVolume;	//変更したボリュームを適応する
-					BGM.bFadeOut = false;				//フェードアウト終了
+					BGM.fVolume			= 0.0f;				//ボリュームを最低値固定
+					BGM.Source.volume	= BGM.fVolume;		//変更したボリュームを適応する
+					BGM.bFadeOut		= false;			//フェードアウト終了
 
 					//BGMを停止する
 					StopBGM(false);
@@ -192,12 +182,129 @@ public class SoundManager : MonoBehaviour
 			}
 		}
 	}
-	
+
+	//********************************************************************** 以降、ゲッター **********************************************************************
+	//====================================================================================================
+	//メソッド名	：GetBGM
+	//役割			：指定したBGMデータを取得する
+	//引数			：(int nPlayNumber)			再生番号
+	//戻り値		：(AudioClip型)				指定された再生番号のBGMデータ
+	//作成者		：Nomura Syouhei
+	//====================================================================================================
+	public AudioClip GetBGM(int nPlayNumber)
+	{
+		//指定された再生番号が0以上(マイナス値指定×)、②且つBGMの登録最大数を上回っていない場合
+		if((0 <= nPlayNumber) && (BGMData.Length > nPlayNumber))
+		{
+			//指定された再生番号のBGMデータを返却する
+			return BGMData[nPlayNumber];
+		}
+
+		//BGMデータが参照できなかった場合、その旨を表示
+		//条件毎に原因を載せたエラーログを出力する
+		if(0 > nPlayNumber)
+		{
+			//エラーログ出力 - 再生番号がマイナス値
+			Debug.Log("(SoundManager.GetBGM)指定された再生番号がマイナス値です。 再生番号：" + nPlayNumber);
+		}
+		else if(BGMData.Length <= nPlayNumber)
+		{
+			//エラーログ出力 - BGMの登録最大数を超える
+			Debug.Log("(SoundManager.GetBGM)指定された再生番号は登録数を超えています。 再生番号：" + nPlayNumber + "　BGM登録数：" + BGMData.Length);
+		}
+		else
+		{
+			//エラーログ出力 - 不明
+			Debug.Log("Unknown Error");
+		}
+
+		//nullを返却
+		return null;
+	}
+
+	//====================================================================================================
+	//メソッド名	：GetSE
+	//役割			：指定したSEデータを取得する
+	//引数			：(int nPlayNumber)			再生番号
+	//戻り値		：(AudioClip型)				指定された再生番号のSEデータ
+	//作成者		：Nomura Syouhei
+	//====================================================================================================
+	public AudioClip GetSE(int nPlayNumber)
+	{
+		//指定された再生番号が0以上(マイナス値指定×)、②且つSEの登録最大数を上回っていない場合
+		if((0 <= nPlayNumber) && (SEData.Length > nPlayNumber))
+		{
+			//指定された再生番号のSEデータを返却する
+			return SEData[nPlayNumber];
+		}
+
+		//SEデータが参照できなかった場合、その旨を表示
+		//条件毎に原因を載せたエラーログを出力する
+		if(0 > nPlayNumber)
+		{
+			//エラーログ出力 - 再生番号がマイナス値
+			Debug.Log("(SoundManager.GetSE)指定された再生番号がマイナス値です。 再生番号：" + nPlayNumber);
+		}
+		else if(SEData.Length <= nPlayNumber)
+		{
+			//エラーログ出力 - SEの登録最大数を超える
+			Debug.Log("(SoundManager.GetSE)指定された再生番号は登録数を超えています。 再生番号：" + nPlayNumber + "　SE登録数：" + SEData.Length);
+		}
+		else
+		{
+			//エラーログ出力 - 不明
+			Debug.Log("Unknown Error");
+		}
+
+		//nullを返却
+		return null;
+	}
+
+	//====================================================================================================
+	//メソッド名	：GetVoice
+	//役割			：指定したVoiceデータを取得する
+	//引数			：(int nPlayNumber)			再生番号
+	//戻り値		：(AudioClip型)				指定された再生番号のVoiceデータ
+	//作成者		：Nomura Syouhei
+	//====================================================================================================
+	public AudioClip GetVoice(int nPlayNumber)
+	{
+		//指定された再生番号が0以上(マイナス値指定×)、②且つVoiceの登録最大数を上回っていない場合
+		if((0 <= nPlayNumber) && (VoiceData.Length > nPlayNumber))
+		{
+			//指定された再生番号のVoiceデータを返却する
+			return VoiceData[nPlayNumber];
+		}
+
+		//Voiceデータが参照できなかった場合、その旨を表示
+		//条件毎に原因を載せたエラーログを出力する
+		if(0 > nPlayNumber)
+		{
+			//エラーログ出力 - 再生番号がマイナス値
+			Debug.Log("(SoundManager.GetVoice)指定された再生番号がマイナス値です。 再生番号：" + nPlayNumber);
+		}
+		else if(VoiceData.Length <= nPlayNumber)
+		{
+			//エラーログ出力 - Voiceの登録最大数を超える
+			Debug.Log("(SoundManager.GetVoice)指定された再生番号は登録数を超えています。 再生番号：" + nPlayNumber + "　Voice登録数：" + VoiceData.Length);
+		}
+		else
+		{
+			//エラーログ出力 - 不明
+			Debug.Log("Unknown Error");
+		}
+
+		//nullを返却
+		return null;
+	}
+
+	//********************************************************************** 以降、再生・停止関連 **********************************************************************	
 	//====================================================================================================
 	//メソッド名	：PlayBGM
 	//役割			：指定したBGMを再生する
 	//引数			：(int nPlayNumber)			再生番号
 	//				　(bool bFadeIn)			フェードインで開始するかしないか【true：フェードインで開始　false：フェードイン無し】
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void PlayBGM(int nPlayNumber , bool bFadeIn)
@@ -205,9 +312,9 @@ public class SoundManager : MonoBehaviour
 		//①指定された再生番号が0以上(マイナス値指定×)、②且つBGMの登録最大数を上回っていなく、③且つ再生中BGMの再生番号と同じ再生番号ではない場合
 		if ((0 <= nPlayNumber) && (BGMData.Length > nPlayNumber) && (BGM.Source.clip != BGMData[nPlayNumber]))
 		{
-			BGM.Source.Stop();						//BGMを停止
-			BGM.Source.clip = BGMData[nPlayNumber];	//指定された再生番号のBGMを、BGM再生デバイスに設定
-			BGM.Source.volume = BGM.fVolume;		//BGMボリューム設定
+			BGM.Source.Stop();								//BGMを停止
+			BGM.Source.clip		= BGMData[nPlayNumber];		//指定された再生番号のBGMを、BGM再生デバイスに設定
+			BGM.Source.volume	= BGM.fVolume;				//BGMボリューム設定
 			
 			//フェードインで開始する場合
 			if(bFadeIn)
@@ -256,6 +363,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：StopBGM
 	//役割			：再生中のBGMを停止する
 	//引数			：(bool bFadeOut)			フェードアウトで開始するかしないか【true：フェードアウトして停止　false：フェードアウト無し】
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void StopBGM(bool bFadeOut)
@@ -264,8 +372,8 @@ public class SoundManager : MonoBehaviour
 		if (!(bFadeOut))
 		{
 			BGM.Source.Stop();			//BGMを停止
-			BGM.Source.clip = null;		//BGM再生デバイスの再生BGM設定にnull代入
-			BGM.fVolume = 1.0f;			//再生ボリュームを最大に設定
+			BGM.Source.clip	= null;		//BGM再生デバイスの再生BGM設定にnull代入
+			BGM.fVolume		= 1.0f;		//再生ボリュームを最大に設定
 		}
 		else
 		{
@@ -278,6 +386,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：FadeInBGM
 	//役割			：BGMのフェードインを開始するフラグを立てる
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void FadeInBGM()
@@ -285,9 +394,9 @@ public class SoundManager : MonoBehaviour
 		//フェードアウトフラグがONでは無い場合に、フェードインを可能にする
 		if(!(BGM.bFadeOut))
 		{
-			BGM.bFadeIn = true;					//フェードインフラグをONにする
-			BGM.fVolume = 0.0f;					//フェードインを行うにあたって、ボリュームを0から徐々に上げていく
-			BGM.Source.volume = BGM.fVolume;	//変更したボリュームを適応する
+			BGM.bFadeIn			= true;					//フェードインフラグをONにする
+			BGM.fVolume			= 0.0f;					//フェードインを行うにあたって、ボリュームを0から徐々に上げていく
+			BGM.Source.volume	= BGM.fVolume;			//変更したボリュームを適応する
 		}
 	}
 
@@ -295,6 +404,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：FadeOutBGM
 	//役割			：BGMのフェードアウトを開始するフラグを立てる
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void FadeOutBGM()
@@ -311,6 +421,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：SetBGMFadeSpeed
 	//役割			：BGMのフェード速度を設定する
 	//引数			：(int nFrame)		フェード速度([nFrame]毎にボリューム加算)
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void SetBGMFadeSpeed(int nFrame)
@@ -323,10 +434,14 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：PlaySE
 	//役割			：指定したSEを再生する
 	//引数			：(int nPlayNumber)		再生番号
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void PlaySE(int nPlayNumber)
 	{
+		//******************** 変数宣言 ********************
+
+
 		//①指定された再生番号が0以上(マイナス値指定×)、②且つSEの登録最大数を上回っていない場合
 		if ((0 <= nPlayNumber) && (SEData.Length > nPlayNumber))
 		{
@@ -336,8 +451,8 @@ public class SoundManager : MonoBehaviour
 				//対象のSE再生デバイスが再生中ではない場合
 				if (!(SE[nLoop].Source.isPlaying))
 				{
-					SE[nLoop].Source.clip = SEData[nPlayNumber];	//指定された再生番号のSEを、SE再生デバイスに設定
-					SE[nLoop].Source.volume = SE[nLoop].fVolume;	//再生ボリューム設定
+					SE[nLoop].Source.clip	= SEData[nPlayNumber];	//指定された再生番号のSEを、SE再生デバイスに設定
+					SE[nLoop].Source.volume	= SE[nLoop].fVolume;	//再生ボリューム設定
 					SE[nLoop].Source.Play();						//SEを再生
 
 					//メソッドから抜ける
@@ -379,6 +494,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：StopSE
 	//役割			：指定した再生中のSEを停止する
 	//引数			：(int nPlayNumber)			再生番号
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void StopSE(int nPlayNumber)
@@ -386,9 +502,20 @@ public class SoundManager : MonoBehaviour
 		//①指定された再生番号が0以上(マイナス値指定×)、②且つSEの登録最大数を上回っていない場合
 		if ((0 <= nPlayNumber) && (SEData.Length > nPlayNumber))
 		{
-			SE[nPlayNumber].Source.Stop();			//SEを停止する
-			SE[nPlayNumber].Source.clip = null;		//SE再生デバイスの再生SE設定にnull代入
-			SE[nPlayNumber].fVolume = 1.0f;			//再生ボリュームを最大に設定
+			//SE再生デバイス中から、再生中の同名SEを探索する
+			for (int nLoop = 0; nLoop < SE.Length; nLoop++)
+			{
+				//①対象のSE再生デバイスが再生中、②且つ指定した再生番号のSEが再生されている場合
+				if ((SE[nLoop].Source.isPlaying) && SE[nLoop].Source.clip == SEData[nPlayNumber])
+				{
+					SE[nLoop].Source.Stop();			//SEを停止する
+					SE[nLoop].Source.clip	= null;		//SE再生デバイスの再生SE設定にnull代入
+					SE[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
+
+					//メソッドから抜ける
+					return;
+				}
+			}
 		}
 		//上記条件に当てはまらなかった場合(再生番号の指定が間違っていた場合)
 		else
@@ -419,6 +546,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：StopAllSE
 	//役割			：全ての再生中のSEを停止する
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void StopAllSE()
@@ -426,9 +554,9 @@ public class SoundManager : MonoBehaviour
 		//SE再生デバイス分だけループする
 		for(int nLoop = 0 ; nLoop < SE.Length ; nLoop++)
 		{
-			SE[nLoop].Source.Stop();		//SEを停止する
-			SE[nLoop].Source.clip = null;	//SE再生デバイスの再生SE設定にnull代入
-			SE[nLoop].fVolume = 1.0f;		//再生ボリュームを最大に設定
+			SE[nLoop].Source.Stop();			//SEを停止する
+			SE[nLoop].Source.clip	= null;		//SE再生デバイスの再生SE設定にnull代入
+			SE[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
 		}
 	}
 	
@@ -436,6 +564,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：PlayVoice
 	//役割			：指定したVoiceを再生する
 	//引数			：(int nPlayNumber)		再生番号
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void PlayVoice(int nPlayNumber)
@@ -449,8 +578,8 @@ public class SoundManager : MonoBehaviour
 				//対象のVoice再生デバイスが再生中ではない場合
 				if(!(Voice[nLoop].Source.isPlaying))
 				{
-					Voice[nLoop].Source.clip = VoiceData[nPlayNumber];		//指定された再生番号のVoiceを、Voice再生デバイスに設定
-					Voice[nLoop].Source.volume = Voice[nLoop].fVolume;		//再生ボリューム設定
+					Voice[nLoop].Source.clip	= VoiceData[nPlayNumber];	//指定された再生番号のVoiceを、Voice再生デバイスに設定
+					Voice[nLoop].Source.volume	= Voice[nLoop].fVolume;		//再生ボリューム設定
 					Voice[nLoop].Source.Play();								//Voiceを再生
 					
 					//メソッドから抜ける
@@ -492,6 +621,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：StopVoice
 	//役割			：指定した再生中のVoiceを停止する
 	//引数			：(int nPlayNumber)		再生番号
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void StopVoice(int nPlayNumber)
@@ -499,9 +629,20 @@ public class SoundManager : MonoBehaviour
 		//①指定された再生番号が0以上(マイナス値指定×)、②且つVoiceの登録最大数を上回っていない場合
 		if ((0 <= nPlayNumber) && (VoiceData.Length > nPlayNumber))
 		{
-			Voice[nPlayNumber].Source.Stop();			//Voiceを停止する
-			Voice[nPlayNumber].Source.clip = null;		//Voice再生デバイスの再生Voice設定にnull代入
-			Voice[nPlayNumber].fVolume = 1.0f;			//再生ボリュームを最大に設定
+			//Voice再生デバイス中から、再生中の同名Voiceを探索する
+			for (int nLoop = 0; nLoop < Voice.Length; nLoop++)
+			{
+				//①対象のVoice再生デバイスが再生中、②且つ指定した再生番号のVoiceが再生されている場合
+				if ((Voice[nLoop].Source.isPlaying) && Voice[nLoop].Source.clip == VoiceData[nPlayNumber])
+				{
+					Voice[nLoop].Source.Stop();				//Voiceを停止する
+					Voice[nLoop].Source.clip	= null;		//Voice再生デバイスの再生Voice設定にnull代入
+					Voice[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
+
+					//メソッドから抜ける
+					return;
+				}
+			}
 		}
 		//上記条件に当てはまらなかった場合(再生番号の指定が間違っていた場合)
 		else
@@ -532,6 +673,7 @@ public class SoundManager : MonoBehaviour
 	//メソッド名	：StopAllVoice
 	//役割			：全ての再生中のVoiceを停止する
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void StopAllVoice()
@@ -540,8 +682,8 @@ public class SoundManager : MonoBehaviour
 		for(int nLoop = 0 ; nLoop < Voice.Length ; nLoop++)
 		{
 			Voice[nLoop].Source.Stop();				//Voiceを停止する
-			Voice[nLoop].Source.clip = null;		//Voice再生デバイスの再生Voice設定にnull代入
-			Voice[nLoop].fVolume = 1.0f;			//再生ボリュームを最大に設定
+			Voice[nLoop].Source.clip	= null;		//Voice再生デバイスの再生Voice設定にnull代入
+			Voice[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
 		}
 	}
 }

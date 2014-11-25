@@ -19,17 +19,40 @@ public class TitleManager : MonoBehaviour {
 			}
 		}
 
+		//サウンドテスト
+		//TitleSceneSoundTest();
+	}
+
+	void FlashMessage() {
+		GUIText[] gt = GameObject.FindObjectsOfType<GUIText>();
+		if(gt[0].text == "Rabit boots") {
+			if(gt[1].text == "") {
+				gt[1].text = "Please Start Button";
+			} else {
+				gt[1].text = "";
+			}
+		} else {
+			if(gt[0].text == "") {
+				gt[0].text = "Please Start Button";
+			} else {
+				gt[0].text = "";
+			}
+		}
+	}
+
+	public void TitleSceneSoundTest()
+	{
 		//============================== 以下、サウンドデバイスのテスト用 ==============================
 		SoundManager SoundDevice = GameObject.FindObjectOfType<SoundManager>();
 
 		//1キーで敵艦隊見ゆ
-		if(Input.GetKeyDown(KeyCode.Alpha1))
+		if (Input.GetKeyDown(KeyCode.Alpha1))
 		{
 			//通常再生
 			SoundDevice.PlayBGM(0, false);
 		}
 		//2キーで鉄底海峡
-		if(Input.GetKeyDown(KeyCode.Alpha2))
+		if (Input.GetKeyDown(KeyCode.Alpha2))
 		{
 			//通常再生
 			SoundDevice.PlayBGM(1, false);
@@ -53,22 +76,5 @@ public class TitleManager : MonoBehaviour {
 			SoundDevice.StopBGM(true);
 		}
 		//============================== サウンドデバイステスト用ここまで ==============================
-	}
-
-	void FlashMessage() {
-		GUIText[] gt = GameObject.FindObjectsOfType<GUIText>();
-		if(gt[0].text == "Rabit boots") {
-			if(gt[1].text == "") {
-				gt[1].text = "Please Start Button";
-			} else {
-				gt[1].text = "";
-			}
-		} else {
-			if(gt[0].text == "") {
-				gt[0].text = "Please Start Button";
-			} else {
-				gt[0].text = "";
-			}
-		}
 	}
 }

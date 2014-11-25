@@ -18,7 +18,7 @@ public class Goal : SpecialFloor {
 		try {
 			ScoreManager sm = FindObjectOfType<ScoreManager>();
 			int addScore = (player.frameCount > 200) ? 500 : 500 - (player.frameCount - 200) * 2;
-			sm.AddScore(addScore);
+			sm.PlusNowScore(addScore);
 		} catch {
 			print("not found score manager");
 		}

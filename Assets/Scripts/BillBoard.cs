@@ -20,6 +20,7 @@ public class BillBoard : MonoBehaviour
 	//メソッド名	：Start
 	//役割			：実行時に呼び出されるメソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	void Start()
@@ -36,6 +37,7 @@ public class BillBoard : MonoBehaviour
 	//メソッド名	：Update
 	//役割			：更新メソッド
 	//引数			：void
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	void Update()
@@ -45,7 +47,7 @@ public class BillBoard : MonoBehaviour
 		if(bControlVerticalFlag)
 		{
 			//******************** 変数宣言 ********************
-			Vector3 Target;		//ベクトル格納用
+			Vector3 Target = new Vector3(0.0f , 0.0f , 0.0f);		//ベクトル格納用
 
 			//視点方向変更処理
 			Target = this.TargetCamera.transform.position;	//カメラの方向を取得する
@@ -64,6 +66,7 @@ public class BillBoard : MonoBehaviour
 	//メソッド名	：SetCamera
 	//役割			：オブジェクトを向かせる対象となる視点カメラを設定する
 	//引数			：(Camera PerspectiveCamera)		対象の視点カメラ
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void SetCamera(Camera PerspectiveCamera)
@@ -76,6 +79,7 @@ public class BillBoard : MonoBehaviour
 	//メソッド名	：SetControlVerticalFlag
 	//役割			：オブジェクトを上下に回転させる制御用フラグの設定
 	//引数			：(bool bControlFlag)		上下回転制御フラグ
+	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
 	public void SetControlVerticalFlag(bool bControlFlag)

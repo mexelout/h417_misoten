@@ -17,7 +17,7 @@ public class Bound : SpecialFloor {
 	{
 		player.jumpPower = player.jumpPowerDefault * 20.5f;
 		player.rigidbody.AddForce(Vector3.up * player.jumpPower, ForceMode.Impulse);
-		FindObjectOfType<ScoreManager>().AddScore(100);
+		FindObjectOfType<ScoreManager>().PlusNowScore(100);
 	}
 
 }

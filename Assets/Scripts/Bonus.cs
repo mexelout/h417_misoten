@@ -15,7 +15,7 @@ public class Bonus : SpecialFloor {
 
 	public override void Execute(Player player)
 	{
-		FindObjectOfType<ScoreManager>().AddScore(1000);
+		FindObjectOfType<ScoreManager>().PlusNowScore(1000);
 	}
 
 }
