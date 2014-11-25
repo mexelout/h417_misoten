@@ -70,21 +70,16 @@ public class Player : MonoBehaviour {
 		if(gm != null && gm.GetStartCount() > 0)
 			vertical *= 0;
 
-		if(roadJoint.name.Contains("Parabola"))
-		{
-			Vector3 vec = myBezier.GetPointAtTime( t );
-			Vector3 dis = roadJoint.transform.position - roadJoint.prevJoint.transform.position;
-			vec.x = roadJoint.prevJoint.transform.position.x + dis.x * t;
-			vec.z = roadJoint.prevJoint.transform.position.z + dis.z * t;
+		if(roadJoint.name.Contains("Parabola")) {
+			Vector3 vec = myBezier.GetPointAtTime(t);
+//			Vector3 dis = roadJoint.transform.position - roadJoint.prevJoint.transform.position;
+//			vec.x = roadJoint.prevJoint.transform.position.x + dis.x * t;
+//			vec.z = roadJoint.prevJoint.transform.position.z + dis.z * t;
 			transform.position = vec;
 			t += 0.005f;
-			if( t > 1f )
+			if(t > 1f)
 				t = 0f;
-	
-			//print("test");
-		}
-		else
-		{
+		} else {
 			transform.Translate(0, 0, vertical);
 		}
 
@@ -165,23 +160,13 @@ public class Player : MonoBehaviour {
 				t = 0;
 				rigidbody.velocity = new Vector3(0, 0, 0);
 				//	p0 = roadJoint.prevJoint.transform.position;
-				p0 = roadJoint.prevJoint.transform.position;	
-				p3 = roadJoint.transform.position;
-				p0 = new Vector3(p0.x, p0.y, p0.z);
-				p3 = new Vector3(p3.x, p3.y, p3.z);
-
-				float dis = Vector3.Distance(p0,p3);
-				roadJoint.prevJoint.transform.LookAt(roadJoint.transform);
-				Vector3 up = roadJoint.prevJoint.transform.up;
-				p1 = (( p3 - p0 ) / 2) + p0;// 2tennno tyuusinntenn
-				p1 = p1 +( up * dis);
-
-				myBezier = new Bezier( p0,p1,p2,p3);
-				Debug.Log(p0);
-				Debug.Log(p1);
-				Debug.Log(p2);
-				Debug.Log(p3);
-				print("in jumpJoint");
+				p0 = roadJoint.prevJoint.transform.position.Clone();
+				p3 = roadJoint.transform.position.Clone();
+				Vector3 dir = p3 - p0;
+				p1 = p0 + dir * 0.2f;
+				p2 = p0 + dir * 0.8f;
+				p1.y = p2.y = (p0.y > p3.y) ? p0.y + 30 : p3.y + 30;
+				myBezier = new Bezier(p0, p1, p2, p3);
 			}
 			return;
 		} catch {
@@ -218,14 +203,18 @@ public class Player : MonoBehaviour {
 		if(roadJoint.name.Contains("Road") || roadJoint.name.Contains("Parabola")) {
 			// トランスフォームはクローンができないのでそのまま
 			Transform t = roadJoint.transform;
-			Vector3 lockAt = t.position;
-			float y = lockAt.y;
-			lockAt.y = transform.position.y;
-			t.position = lockAt;
+			Vector3 lookAt = t.position;
+			Vector3 copyLookAt = new Vector3(lookAt.x, lookAt.y, lookAt.z);
+			lookAt.y = transform.position.y;
+			Vector3 forward = transform.forward;
+			Vector3 targetDir = lookAt - transform.position;
+			lookAt = (targetDir - (forward * targetDir.magnitude)) * 0.1f;
+			lookAt += forward * targetDir.magnitude;
+			lookAt += transform.position;
+			t.position = lookAt;
 			gameObject.transform.LookAt(t);
 			// 同じ座標を参照いている為、元に戻してやらないと高さが初期プレイヤー高度と同じになる
-			lockAt.y = y;
-			t.position = lockAt;
+			t.position = copyLookAt;
 		} else if(roadJoint.name.Contains("Jump")) {
 			transform.LookAt(roadJoint.transform);
 		}

@@ -39,41 +39,9 @@ public class Bezier : System.Object
 		this.p3 = v3;
 	}
 	// 0.0 >= t <= 1.0
-	public Vector3 GetPointAtTime( float t )
-	{
-		this.CheckConstant();
-		float t2 = t * t;
-		float t3 = t * t * t;
-		float x = this.Ax * t3 + this.Bx * t2 + this.Cx * t + p0.x;
-		float y = this.Ay * t3 + this.By * t2 + this.Cy * t + p0.y;
-		float z = this.Az * t3 + this.Bz * t2 + this.Cz * t + p0.z;
-		return new Vector3( x, y, z );
-	}
-	
-	private void SetConstant()
-	{
-		this.Cx = 3f * ( ( this.p0.x + this.p1.x ) - this.p0.x );
-		this.Bx = 3f * ( ( this.p3.x + this.p2.x ) - ( this.p0.x + this.p1.x ) ) - this.Cx;
-		this.Ax = this.p3.x - this.p0.x - this.Cx - this.Bx;
-		this.Cy = 3f * ( ( this.p0.y + this.p1.y ) - this.p0.y );
-		this.By = 3f * ( ( this.p3.y + this.p2.y ) - ( this.p0.y + this.p1.y ) ) - this.Cy;
-		this.Ay = this.p3.y - this.p0.y - this.Cy - this.By;
-		
-		this.Cz = 3f * ( ( this.p0.z + this.p1.z ) - this.p0.z );
-		this.Bz = 3f * ( ( this.p3.z + this.p2.z ) - ( this.p0.z + this.p1.z ) ) - this.Cz;
-		this.Az = this.p3.z - this.p0.z - this.Cz - this.Bz;
-	}
-	
-	// Check if p0, p1, p2 or p3 have change
-	private void CheckConstant()
-	{
-		if( this.p0 != this.b0 || this.p1 != this.b1 || this.p2 != this.b2 || this.p3 != this.b3 )
-		{
-			this.SetConstant();
-			this.b0 = this.p0;
-			this.b1 = this.p1;
-			this.b2 = this.p2;
-			this.b3 = this.p3;
-		}
+	public Vector3 GetPointAtTime(float t) {
+		Vector3 m0 = (p1 - p0) * t + p0, m1 = (p2 - p1) * t + p1, m2 = (p3 - p2) * t + p2, b0 = (m1 - m0) * t + m0, b1 = (m2 - m1) * t + m1;
+
+		return (b1 - b0) * t + b0;
 	}
 }
