@@ -3,20 +3,11 @@ using System.Collections;
 
 public class RoadJoint : MonoBehaviour {
 
-	public GameObject prevJoint {
-		get;
-		private set;
-	}
+	public GameObject prevJoint;
 
-	public GameObject nextJoint {
-		get;
-		private set;
-	}
+	public GameObject nextJoint;
 
-	public Hashtable sideJoint {
-		get;
-		private set;
-	}
+	public Hashtable sideJoint;
 
 	[SerializeField]
 	private GameObject _specialCamera;

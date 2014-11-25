@@ -1,0 +1,134 @@
+fileFormatVersion: 2
+guid: 93e7e1dcca08f4aa790afe8d975a2a81
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: body_mesh
+    100002: //RootNode
+    100004: EarBase
+    100006: Head
+    100008: Hips
+    100010: Left_Arm
+    100012: Left_Ear1
+    100014: Left_Ear2
+    100016: Left_Ear3
+    100018: Left_Ear4
+    100020: Left_Ear5
+    100022: Left_Foot
+    100024: Left_ForeArm
+    100026: Left_Hand
+    100028: Left_Leg
+    100030: Left_sholder
+    100032: Left_Toe
+    100034: Left_UpLeg
+    100036: Neck
+    100038: Right_Arm
+    100040: Right_Ear1
+    100042: Right_Ear2
+    100044: Right_Ear3
+    100046: Right_Ear4
+    100048: Right_Ear5
+    100050: Right_Foot
+    100052: Right_ForeArm
+    100054: Right_Hand
+    100056: Right_Leg
+    100058: Right_sholder
+    100060: Right_Toe
+    100062: Right_UpLeg
+    100064: Sippo1
+    100066: SippoBase
+    100068: Spine
+    100070: Top
+    400000: body_mesh
+    400002: //RootNode
+    400004: EarBase
+    400006: Head
+    400008: Hips
+    400010: Left_Arm
+    400012: Left_Ear1
+    400014: Left_Ear2
+    400016: Left_Ear3
+    400018: Left_Ear4
+    400020: Left_Ear5
+    400022: Left_Foot
+    400024: Left_ForeArm
+    400026: Left_Hand
+    400028: Left_Leg
+    400030: Left_sholder
+    400032: Left_Toe
+    400034: Left_UpLeg
+    400036: Neck
+    400038: Right_Arm
+    400040: Right_Ear1
+    400042: Right_Ear2
+    400044: Right_Ear3
+    400046: Right_Ear4
+    400048: Right_Ear5
+    400050: Right_Foot
+    400052: Right_ForeArm
+    400054: Right_Hand
+    400056: Right_Leg
+    400058: Right_sholder
+    400060: Right_Toe
+    400062: Right_UpLeg
+    400064: Sippo1
+    400066: SippoBase
+    400068: Spine
+    400070: Top
+    4300000: body_mesh
+    9500000: //RootNode
+    13700000: body_mesh
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
