@@ -19,8 +19,10 @@ public class ResultManager : MonoBehaviour {
 		ScoreManagerClassDevice = ScoreManager.GetComponent<ScoreManager>();		//スコア管理デバイス
 
 		//******************** ランキング設定 ********************
-		ScoreManagerClassDevice.SetRanking(ScoreFileDevice.ScoreRead());
-
+		ScoreManagerClassDevice.SetRanking(ScoreFileDevice.ReadScore());
+		ScoreManager.SortRanking();
+		ScoreFileDevice.WriteScore(ScoreManager.GetRanking());
+		
 		//******************** ランキング出力 ********************
 		try
 		{
@@ -72,7 +74,7 @@ public class ResultManager : MonoBehaviour {
 		}
 		catch (IndexOutOfRangeException Index)
 		{
-			print("配列超えてんよ～");
+			print("配列超えてんよ～。ただしGUIテキストの数がReleaseSceneとSceneEditSceneで違うため、一概にコーディングミスとは言えない。");
 		}
 		catch (ArgumentNullException GetNull)
 		{

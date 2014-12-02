@@ -20,6 +20,8 @@ public class TextureScroll : MonoBehaviour
 	//++++++++++ パブリック ++++++++++
 	public int		nVerticalAnimationNumber	= 1;						//縦方向アニメーション枚数
 	public int		nHorizontalAnimationNumber	= 10;						//横方向アニメーション枚数
+	public int		nVerticalScopeNumber		= 1;						//縦方向テクスチャの使用範囲
+	public int		nHorizontalScopeNumber		= 10;						//横方向テクスチャの使用範囲
 	public float	fScrollSpeed				= DEFAULT_SCROLL_SPEED;		//テクスチャのスクロール速度
 	public bool		bScrollTypeFlag				= false;					//スクロール種類切り替えフラグ【true：固定値毎にスクロール　false：時間毎にスクロール】
 	public bool		bVerticalExecutionFlag		= true;						//縦方向スクロール実行フラグ【true：スクロール実行　false：スクロールしない】
@@ -37,7 +39,12 @@ public class TextureScroll : MonoBehaviour
 	//====================================================================================================
 	void Start()
 	{
-		
+		//開始時にスクロール種類フラグがtrueだった場合
+		if(bScrollTypeFlag)
+		{
+			//リピート開始(0.01秒後に1回、それ以降スクロール速度毎に呼び出し)
+			InvokeRepeating("UpdateTextureScroll" , 0.01f , fScrollSpeed);
+		}
 	}
 
 	//====================================================================================================
@@ -166,10 +173,16 @@ public class TextureScroll : MonoBehaviour
 		Offset.y += (float)(1.0f / nVerticalAnimationNumber);
 
 		//座標値が1を超えた場合、0に戻す
-		if(Offset.x >= 1.0f)
+		if(Offset.x >= 1.0f || Offset.x >= nHorizontalScopeNumber * (1.0f / nHorizontalAnimationNumber))
 		{
 			//初期値に戻す
 			Offset.x = 0.0f;
+		}
+		//座標値が1を超えた場合、0に戻す
+		if (Offset.y >= 1.0f || Offset.y >= nVerticalScopeNumber * (1.0f / nVerticalAnimationNumber))
+		{
+			//初期値に戻す
+			Offset.y = 0.0f;
 		}
 
 		//サイズ値を算出
@@ -353,7 +366,7 @@ public class TextureScroll : MonoBehaviour
 		if (bScrollTypeFlag)
 		{
 			//リピート開始(0.01秒後に1回、それ以降秒毎に呼び出し)
-			InvokeRepeating("UpdateTextureScroll" , 0.01f , (1.0f / 10.0f));
+			InvokeRepeating("UpdateTextureScroll" , 0.01f , fScrollSpeed);
 		}
 		//反転後のフラグがfalseである場合
 		else
