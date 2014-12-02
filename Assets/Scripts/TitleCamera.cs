@@ -3,9 +3,6 @@ using System.Collections;
 
 public class TitleCamera : MonoBehaviour {
 
-	private float TitleCameraRotX = 17.05f;
-	private float TitleCameraRotY = 0.0f;
-	private float TitleCameraRotZ = 0.0f;
 
 	// Use this for initialization
 	void Start () {

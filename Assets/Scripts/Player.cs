@@ -17,6 +17,7 @@ public class Player : MonoBehaviour {
 	private int anmSpeedHash;
 	private int anmJumpHash;
 	private int anmRotHash;
+	private int anmStumbleHash;
 	public float jumpPower;
 	public float jumpPowerDefault = 100;
 
@@ -49,6 +50,7 @@ public class Player : MonoBehaviour {
 		anmSpeedHash = Animator.StringToHash("Speed");
 		anmJumpHash = Animator.StringToHash("Jump");
 		anmRotHash = Animator.StringToHash("Rotate");
+		anmStumbleHash = Animator.StringToHash("Stumble");
 		speed = speedDefault;
 		jumpPower = jumpPowerDefault;
 		frameCount = 0;
@@ -83,7 +85,11 @@ public class Player : MonoBehaviour {
 			transform.Translate(0, 0, vertical);
 		}
 
-		anm.SetFloat(anmSpeedHash, vertical);
+		if(anm.GetBool(anmStumbleHash) == false)
+		{
+			anm.SetFloat(anmSpeedHash, vertical);
+		}
+
 
 		if(Input.GetAxis("Jump") > 0) {
 			if(anm.GetBool(anmRotHash) == false && isFly == false && roadJoint.name.Contains("Road")) {
@@ -224,5 +230,11 @@ public class Player : MonoBehaviour {
 
 	void EndRotate() {
 		anm.SetBool(anmRotHash, false);
+	}
+	public void StartStumble() {
+		anm.SetBool(anmStumbleHash, true);
+	}
+	public void EndStumble() {
+		anm.SetBool(anmStumbleHash, false);
 	}
 }
