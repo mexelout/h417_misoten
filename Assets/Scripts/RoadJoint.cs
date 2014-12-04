@@ -7,8 +7,6 @@ public class RoadJoint : MonoBehaviour {
 
 	public GameObject nextJoint;
 
-	public Hashtable sideJoint;
-
 	[SerializeField]
 	private GameObject _specialCamera;
 	public GameObject specialCamera {
@@ -17,31 +15,20 @@ public class RoadJoint : MonoBehaviour {
 	}
 
 	public int orderNumber;
-	public int laneNumber;
 
 	void Awake() {
 		char[] n = name.ToCharArray();
-		orderNumber = int.Parse(("" + n[n.Length-3] + n[n.Length - 2]).ToString());
-		laneNumber = int.Parse(n[n.Length - 1].ToString());
+		orderNumber = int.Parse(("" + n[n.Length-2] + n[n.Length - 1]).ToString());
 	}
 
 	// Use this for initialization
 	void Start () {
-		sideJoint = new Hashtable();
 		foreach(RoadJoint rj in GameObject.FindObjectsOfType<RoadJoint>()) {
-			if(rj.laneNumber == this.laneNumber) {
-				if(rj.orderNumber == (this.orderNumber + 1)) {
-					nextJoint = rj.gameObject;
-				} else if(rj.orderNumber == (this.orderNumber - 1)) {
-					prevJoint = rj.gameObject;
-				}
-			}
-			if(rj.orderNumber == this.orderNumber) {
-				if(rj.laneNumber == this.laneNumber - 1) {
-					sideJoint["left"] = rj;
-				} else if(rj.laneNumber == this.laneNumber + 1) {
-					sideJoint["right"] = rj;
-				}
+			if(rj.orderNumber == (this.orderNumber + 1)) {
+				nextJoint = rj.gameObject;
+				rj.transform.LookAt(nextJoint.transform);
+			} else if(rj.orderNumber == (this.orderNumber - 1)) {
+				prevJoint = rj.gameObject;
 			}
 		}
 	}

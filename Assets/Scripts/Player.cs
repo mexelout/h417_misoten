@@ -57,7 +57,6 @@ public class Player : MonoBehaviour {
 		isPlay = true;
 		isFly = false;
 
-
 	}
 
 	void Update() {
@@ -101,17 +100,9 @@ public class Player : MonoBehaviour {
 
 		if(horizontal < 0 && !isChangeRoadNumber) {
 			roadNumber -= (roadNumber > 0) ? 1 : 0;
-			RoadJoint rj = roadJoint.sideJoint["left"] as RoadJoint;
-			if(rj) {
-				roadJoint = rj.GetComponent<RoadJoint>();
-			}
 			isChangeRoadNumber = true;
 		} else if(horizontal > 0 && !isChangeRoadNumber) {
 			roadNumber += (roadNumber < 2) ? 1 : 0;
-			RoadJoint rj = roadJoint.sideJoint["right"] as RoadJoint;
-			if(rj != null) {
-				roadJoint = rj.GetComponent<RoadJoint>();
-			}
 			isChangeRoadNumber = true;
 		} else if(horizontal == 0) {
 			isChangeRoadNumber = false;
@@ -159,9 +150,7 @@ public class Player : MonoBehaviour {
 		}
 		try {
 			RoadJoint rj = collider.gameObject.GetComponent<RoadJoint>();
-			if(rj.laneNumber == roadNumber){
-				roadJoint = rj.nextJoint.GetComponent<RoadJoint>();
-			}
+			roadJoint = rj.nextJoint.GetComponent<RoadJoint>();;
 			if(roadJoint.name.Contains("Parabola")) {
 				t = 0;
 				rigidbody.velocity = new Vector3(0, 0, 0);
@@ -212,6 +201,11 @@ public class Player : MonoBehaviour {
 			Vector3 lookAt = t.position;
 			Vector3 copyLookAt = new Vector3(lookAt.x, lookAt.y, lookAt.z);
 			lookAt.y = transform.position.y;
+			if(roadJoint.name.Contains("Road")) {
+				Vector3 offset = roadJoint.transform.right * ((roadNumber - 1.0f) * 3.0f);
+				lookAt.x += offset.x;
+				lookAt.z += offset.z;
+			}
 			Vector3 forward = transform.forward;
 			Vector3 targetDir = lookAt - transform.position;
 			lookAt = (targetDir - (forward * targetDir.magnitude)) * 0.1f;
