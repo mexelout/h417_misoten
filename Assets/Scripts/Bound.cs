@@ -15,9 +15,9 @@ public class Bound : SpecialFloor {
 
 	public override void Execute(Player player)
 	{
-		player.jumpPower = player.jumpPowerDefault * 20.5f;
-		player.rigidbody.AddForce(Vector3.up * player.jumpPower, ForceMode.Impulse);
+		player.rigidbody.AddForce(Vector3.up * player.jumpPower * 4f, ForceMode.Force);
 		FindObjectOfType<ScoreManager>().PlusNowScore(100);
+		player.Invoke("EndRotate", 0.1f); // ジャンプアニメーション呼んでる
 	}
 
 }
