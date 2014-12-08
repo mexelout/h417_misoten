@@ -5,6 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using CommonSound;
 
+//未使用変数警告を非表示に
+#pragma warning disable 0168
+
 //==================== モブクラス ====================
 public class MOBManager : MonoBehaviour
 {

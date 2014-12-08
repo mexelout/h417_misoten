@@ -6,6 +6,10 @@ using System;
 using System.Text;
 using CommonScore;
 
+//未使用変数警告を非表示に
+#pragma warning disable 0219
+#pragma warning disable 0168
+
 //==================== スコアファイル操作クラス ====================
 public class ScoreFileOperation : MonoBehaviour
 {

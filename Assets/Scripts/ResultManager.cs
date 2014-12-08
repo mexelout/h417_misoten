@@ -3,8 +3,8 @@ using UnityEngine;
 using System.Collections;
 using System;
 
-//このスクリプト内の未使用変数の警告表示を消す
-//#pragma warning disable 0414
+//未使用変数警告を非表示に
+#pragma warning disable 0168
 
 public class ResultManager : MonoBehaviour {
 	/* 変数宣言 */

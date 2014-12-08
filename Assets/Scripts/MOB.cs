@@ -2,6 +2,9 @@
 using UnityEngine;
 using System.Collections;
 
+//未使用変数警告を非表示に
+#pragma warning disable 0414
+
 //==================== モブクラス ====================
 public class MOB : MonoBehaviour
 {
