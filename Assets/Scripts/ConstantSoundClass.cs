@@ -60,7 +60,8 @@ namespace CommonSound
 	public static class ConstantScore
 	{
 		//******************** 定数宣言 ********************
-		public static readonly int		DEVICE_NUMBER				= 16;			//再生デバイス数
+		public static readonly int		SE_DEVICE_NUMBER			= 2;			//SE再生デバイス数
+		public static readonly int		VOICE_DEVICE_NUMBER			= 0;			//Voice再生デバイス数
 		public static readonly int		VOLUME_FADE_DEFALUT_SPEED	= 5;			//ボリュームフェードの標準速度
 		public static readonly float	VOLUME_MAX					= 1.0f;			//最大ボリューム値
 		public static readonly float	VOLUME_FADE					= 0.02f;		//ボリュームフェードの減少値

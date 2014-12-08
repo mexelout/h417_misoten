@@ -48,17 +48,21 @@ public class SoundManager : MonoBehaviour
 	
 	//******************** メンバ変数宣言 ********************
 	//++++++++++ プライベート ++++++++++
-	private SoundStructure		BGM;															//BGM用サウンドまとめ
-	private SoundStructure[]	SE		= new SoundStructure[ConstantScore.DEVICE_NUMBER];		//SE用サウンドまとめ
-	private SoundStructure[]	Voice	= new SoundStructure[ConstantScore.DEVICE_NUMBER];		//Voice用サウンドまとめ
-	private int					nFadeCounter;													//フェード時に使用するカウンター
+	private int					nFadeCounter;		//フェード時に使用するカウンター
+	private bool				bSEUseFlag;			//SEデバイス使用フラグ
+	private bool				bVoiceUseFlag;		//Voiceデバイス使用フラグ
+	private SoundStructure		BGM;				//BGM用サウンドまとめ
+	private SoundStructure[]	SE;					//SE用サウンドまとめ
+	private SoundStructure[]	Voice	;			//Voice用サウンドまとめ
 	
 	//++++++++++ プロテクト ++++++++++
 	
 	//++++++++++ パブリック ++++++++++
-	public AudioClip[] BGMData;			//BGMデータ格納配列
-	public AudioClip[] SEData;			//SEデータ格納配列
-	public AudioClip[] VoiceData;		//Voiceデータ格納配列
+	public int			nSEDeviceNumber		= ConstantScore.SE_DEVICE_NUMBER;			//SE再生デバイス生成数
+	public int			nVoiceDeviceNumber	= ConstantScore.VOICE_DEVICE_NUMBER;		//Voice再生デバイス生成数
+	public AudioClip[]	BGMData;			//BGMデータ格納配列
+	public AudioClip[]	SEData;				//SEデータ格納配列
+	public AudioClip[]	VoiceData;			//Voiceデータ格納配列
 	
 	//====================================================================================================
 	//メソッド名	：Awake
@@ -69,6 +73,32 @@ public class SoundManager : MonoBehaviour
 	//====================================================================================================
 	void Awake()
 	{
+		//******************** 再生デバイス生成処理 ********************
+		//SEの再生デバイス数が0以下の場合
+		if (nSEDeviceNumber <= 0)
+		{
+			//SE使用フラグをfalseに設定
+			bSEUseFlag = false;
+		}
+		else
+		{
+			//指定されたSEデバイス数だけデバイスを生成し、使用フラグをtrueに設定
+			SE = new SoundStructure[nSEDeviceNumber];
+			bSEUseFlag = true;
+		}
+		//Voiceの再生デバイス数が0以下の場合
+		if (nVoiceDeviceNumber <= 0)
+		{
+			//Voice使用フラグをfalseに設定
+			bVoiceUseFlag = false;
+		}
+		else
+		{
+			//指定されたVoiceデバイス数だけデバイスを生成、使用フラグをtrueに設定
+			Voice = new SoundStructure[nVoiceDeviceNumber];
+			bVoiceUseFlag = true;
+		}
+
 		//******************** 再生デバイス初期化処理 ********************
 		BGM.Source				= gameObject.AddComponent<AudioSource>();		//BGM再生デバイスを取得
 		BGM.Source.loop			= true;											//BGM再生デバイスにループ設定ON
@@ -78,28 +108,36 @@ public class SoundManager : MonoBehaviour
 		BGM.bFadeIn				= false;										//BGMフェードインフラグ初期化
 		BGM.bFadeOut			= false;										//BGMフェードアウトフラグ初期化
 		
-		//SEデータの登録数だけループする
-		for(int nLoop = 0 ; nLoop < SE.Length ; nLoop++)
+		//SEデバイスが生成されている場合
+		if(bSEUseFlag)
 		{
-			SE[nLoop].Source			= gameObject.AddComponent<AudioSource>();			//SE登録配列毎に、SEを取得してSE再生デバイスに割り当てる
-			SE[nLoop].Source.loop		= false;											//SE再生デバイスにループ設定OFF
-			SE[nLoop].Source.clip		= null;												//再生SE情報をnull設定
-			SE[nLoop].nVolumeFadeSpeed	= ConstantScore.VOLUME_FADE_DEFALUT_SPEED;			//フェード速度初期化
-			SE[nLoop].fVolume			= ConstantScore.VOLUME_MAX;							//SE再生ボリューム初期化
-			SE[nLoop].bFadeIn			= false;											//SEフェードインフラグ初期化
-			SE[nLoop].bFadeOut			= false;											//SEフェードアウトフラグ初期化
+			//SEデータの登録数だけループする
+			for(int nLoop = 0 ; nLoop < SE.Length ; nLoop ++)
+			{
+				SE[nLoop].Source			= gameObject.AddComponent<AudioSource>();			//SE登録配列毎に、SEを取得してSE再生デバイスに割り当てる
+				SE[nLoop].Source.loop		= false;											//SE再生デバイスにループ設定OFF
+				SE[nLoop].Source.clip		= null;												//再生SE情報をnull設定
+				SE[nLoop].nVolumeFadeSpeed	= ConstantScore.VOLUME_FADE_DEFALUT_SPEED;			//フェード速度初期化
+				SE[nLoop].fVolume			= ConstantScore.VOLUME_MAX;							//SE再生ボリューム初期化
+				SE[nLoop].bFadeIn			= false;											//SEフェードインフラグ初期化
+				SE[nLoop].bFadeOut			= false;											//SEフェードアウトフラグ初期化
+			}
 		}
 		
-		//Voiceデータの登録数だけループする
-		for(int nLoop = 0 ; nLoop < Voice.Length ; nLoop++)
+		//Voiceデバイスが生成されている場合
+		if(bVoiceUseFlag)
 		{
-			Voice[nLoop].Source				= gameObject.AddComponent<AudioSource>();		//Voice登録配列毎に、Voiceを取得してVoice再生デバイスに割り当てる
-			Voice[nLoop].Source.loop		= false;										//Voice再生デバイスにループ設定OFF
-			Voice[nLoop].Source.clip		= null;											//再生SE情報をnull設定
-			Voice[nLoop].nVolumeFadeSpeed	= ConstantScore.VOLUME_FADE_DEFALUT_SPEED;		//フェード速度初期化
-			Voice[nLoop].fVolume			= ConstantScore.VOLUME_MAX;						//Voice再生ボリューム初期化
-			Voice[nLoop].bFadeIn			= false;										//Voiceフェードインフラグ初期化
-			Voice[nLoop].bFadeOut			= false;										//Voiceフェードアウトフラグ初期化
+			//Voiceデータの登録数だけループする
+			for(int nLoop = 0 ; nLoop < Voice.Length ; nLoop ++)
+			{
+				Voice[nLoop].Source				= gameObject.AddComponent<AudioSource>();		//Voice登録配列毎に、Voiceを取得してVoice再生デバイスに割り当てる
+				Voice[nLoop].Source.loop		= false;										//Voice再生デバイスにループ設定OFF
+				Voice[nLoop].Source.clip		= null;											//再生SE情報をnull設定
+				Voice[nLoop].nVolumeFadeSpeed	= ConstantScore.VOLUME_FADE_DEFALUT_SPEED;		//フェード速度初期化
+				Voice[nLoop].fVolume			= ConstantScore.VOLUME_MAX;						//Voice再生ボリューム初期化
+				Voice[nLoop].bFadeIn			= false;										//Voiceフェードインフラグ初期化
+				Voice[nLoop].bFadeOut			= false;										//Voiceフェードアウトフラグ初期化
+			}
 		}
 
 		//******************** その他初期化処理 ********************
@@ -439,54 +477,55 @@ public class SoundManager : MonoBehaviour
 	//====================================================================================================
 	public void PlaySE(int nPlayNumber)
 	{
-		//******************** 変数宣言 ********************
-
-
-		//①指定された再生番号が0以上(マイナス値指定×)、②且つSEの登録最大数を上回っていない場合
-		if ((0 <= nPlayNumber) && (SEData.Length > nPlayNumber))
+		//SEデバイスが生成されている場合
+		if(bSEUseFlag)
 		{
-			//SE再生デバイス中から、再生中でないSEを探索する
-			for(int nLoop = 0 ; nLoop < SE.Length ; nLoop++)
+			//①指定された再生番号が0以上(マイナス値指定×)、②且つSEの登録最大数を上回っていない場合
+			if((0 <= nPlayNumber) && (SEData.Length > nPlayNumber))
 			{
-				//対象のSE再生デバイスが再生中ではない場合
-				if (!(SE[nLoop].Source.isPlaying))
+				//SE再生デバイス中から、再生中でないSEを探索する
+				for(int nLoop = 0 ; nLoop < SE.Length ; nLoop ++)
 				{
-					SE[nLoop].Source.clip	= SEData[nPlayNumber];	//指定された再生番号のSEを、SE再生デバイスに設定
-					SE[nLoop].Source.volume	= SE[nLoop].fVolume;	//再生ボリューム設定
-					SE[nLoop].Source.Play();						//SEを再生
+					//対象のSE再生デバイスが再生中ではない場合
+					if(!(SE[nLoop].Source.isPlaying))
+					{
+						SE[nLoop].Source.clip	= SEData[nPlayNumber];	//指定された再生番号のSEを、SE再生デバイスに設定
+						SE[nLoop].Source.volume	= SE[nLoop].fVolume;	//再生ボリューム設定
+						SE[nLoop].Source.Play();						//SEを再生
 
-					//メソッドから抜ける
-					return;
+						//メソッドから抜ける
+						return;
+					}
+				}
+				//SE再生デバイスを全て探索し終えた場合
+				{
+					//エラーログ出力 - SE再生デバイスが全て使われている
+					Debug.Log("(SE)SE再生デバイスが全て使われています。");
 				}
 			}
-			//SE再生デバイスを全て探索し終えた場合
-			{
-				//エラーログ出力 - SE再生デバイスが全て使われている
-				Debug.Log("(SE)SE再生デバイスが全て使われています。");
-			}
-		}
-		//上記条件に当てはまらなかった場合(再生番号の指定が間違っていた場合)
-		else
-		{
-			//条件毎に原因を載せたエラーログを出力する
-			if(0 > nPlayNumber)
-			{
-				//エラーログ出力 - 再生番号がマイナス値
-				Debug.Log("(SE)指定された再生番号がマイナス値です。 再生番号：" + nPlayNumber);
-			}
-			else if (SEData.Length <= nPlayNumber)
-			{
-				//エラーログ出力 - SEの登録最大数を超える
-				Debug.Log("(SE)指定された再生番号は登録数を超えています。 再生番号：" + nPlayNumber + "　SE登録数：" + SEData.Length);
-			}
+			//上記条件に当てはまらなかった場合(再生番号の指定が間違っていた場合)
 			else
 			{
-				//エラーログ出力 - 不明
-				Debug.Log("Unknown Error");
+				//条件毎に原因を載せたエラーログを出力する
+				if (0 > nPlayNumber)
+				{
+					//エラーログ出力 - 再生番号がマイナス値
+					Debug.Log("(SE)指定された再生番号がマイナス値です。 再生番号：" + nPlayNumber);
+				}
+				else if (SEData.Length <= nPlayNumber)
+				{
+					//エラーログ出力 - SEの登録最大数を超える
+					Debug.Log("(SE)指定された再生番号は登録数を超えています。 再生番号：" + nPlayNumber + "　SE登録数：" + SEData.Length);
+				}
+				else
+				{
+					//エラーログ出力 - 不明
+					Debug.Log("Unknown Error");
+				}
+
+				//メソッドから抜ける
+				return;
 			}
-			
-			//メソッドから抜ける
-			return;
 		}
 	}
 	
@@ -499,46 +538,50 @@ public class SoundManager : MonoBehaviour
 	//====================================================================================================
 	public void StopSE(int nPlayNumber)
 	{
-		//①指定された再生番号が0以上(マイナス値指定×)、②且つSEの登録最大数を上回っていない場合
-		if ((0 <= nPlayNumber) && (SEData.Length > nPlayNumber))
+		//SEデバイスが生成されている場合
+		if(bSEUseFlag)
 		{
-			//SE再生デバイス中から、再生中の同名SEを探索する
-			for (int nLoop = 0; nLoop < SE.Length; nLoop++)
+			//①指定された再生番号が0以上(マイナス値指定×)、②且つSEの登録最大数を上回っていない場合
+			if((0 <= nPlayNumber) && (SEData.Length > nPlayNumber))
 			{
-				//①対象のSE再生デバイスが再生中、②且つ指定した再生番号のSEが再生されている場合
-				if ((SE[nLoop].Source.isPlaying) && SE[nLoop].Source.clip == SEData[nPlayNumber])
+				//SE再生デバイス中から、再生中の同名SEを探索する
+				for(int nLoop = 0 ; nLoop < SE.Length ; nLoop ++)
 				{
-					SE[nLoop].Source.Stop();			//SEを停止する
-					SE[nLoop].Source.clip	= null;		//SE再生デバイスの再生SE設定にnull代入
-					SE[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
+					//①対象のSE再生デバイスが再生中、②且つ指定した再生番号のSEが再生されている場合
+					if((SE[nLoop].Source.isPlaying) && SE[nLoop].Source.clip == SEData[nPlayNumber])
+					{
+						SE[nLoop].Source.Stop();			//SEを停止する
+						SE[nLoop].Source.clip	= null;		//SE再生デバイスの再生SE設定にnull代入
+						SE[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
 
-					//メソッドから抜ける
-					return;
+						//メソッドから抜ける
+						return;
+					}
 				}
 			}
-		}
-		//上記条件に当てはまらなかった場合(再生番号の指定が間違っていた場合)
-		else
-		{
-			//条件毎に原因を載せたエラーログを出力する
-			if(0 > nPlayNumber)
-			{
-				//エラーログ出力 - 再生番号がマイナス値
-				Debug.Log("(SE)指定された再生番号がマイナス値です。 再生番号：" + nPlayNumber);
-			}
-			else if (SEData.Length <= nPlayNumber)
-			{
-				//エラーログ出力 - SEの登録最大数を超える
-				Debug.Log("(SE)指定された再生番号は登録数を超えています。 再生番号：" + nPlayNumber + "　SE登録数：" + SEData.Length);
-			}
+			//上記条件に当てはまらなかった場合(再生番号の指定が間違っていた場合)
 			else
 			{
-				//エラーログ出力 - 不明
-				Debug.Log("Unknown Error");
+				//条件毎に原因を載せたエラーログを出力する
+				if (0 > nPlayNumber)
+				{
+					//エラーログ出力 - 再生番号がマイナス値
+					Debug.Log("(SE)指定された再生番号がマイナス値です。 再生番号：" + nPlayNumber);
+				}
+				else if (SEData.Length <= nPlayNumber)
+				{
+					//エラーログ出力 - SEの登録最大数を超える
+					Debug.Log("(SE)指定された再生番号は登録数を超えています。 再生番号：" + nPlayNumber + "　SE登録数：" + SEData.Length);
+				}
+				else
+				{
+					//エラーログ出力 - 不明
+					Debug.Log("Unknown Error");
+				}
+
+				//メソッドから抜ける
+				return;
 			}
-			
-			//メソッドから抜ける
-			return;
 		}
 	}
 	
@@ -551,12 +594,16 @@ public class SoundManager : MonoBehaviour
 	//====================================================================================================
 	public void StopAllSE()
 	{
-		//SE再生デバイス分だけループする
-		for(int nLoop = 0 ; nLoop < SE.Length ; nLoop++)
+		//SEデバイスが生成されている場合
+		if(bSEUseFlag)
 		{
-			SE[nLoop].Source.Stop();			//SEを停止する
-			SE[nLoop].Source.clip	= null;		//SE再生デバイスの再生SE設定にnull代入
-			SE[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
+			//SE再生デバイス分だけループする
+			for(int nLoop = 0 ; nLoop < SE.Length ; nLoop ++)
+			{
+				SE[nLoop].Source.Stop();			//SEを停止する
+				SE[nLoop].Source.clip	= null;		//SE再生デバイスの再生SE設定にnull代入
+				SE[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
+			}
 		}
 	}
 	
@@ -569,51 +616,55 @@ public class SoundManager : MonoBehaviour
 	//====================================================================================================
 	public void PlayVoice(int nPlayNumber)
 	{
-		//①指定された再生番号が0以上(マイナス値指定×)、②且つVoiceの登録最大数を上回っていない場合
-		if ((0 <= nPlayNumber) && (VoiceData.Length > nPlayNumber))
+		//Voiceデバイスが生成されている場合
+		if(bVoiceUseFlag)
 		{
-			//Voice再生デバイス中から、再生中でないVoiceを探索する
-			for(int nLoop = 0 ; nLoop < Voice.Length ; nLoop++)
+			//①指定された再生番号が0以上(マイナス値指定×)、②且つVoiceの登録最大数を上回っていない場合
+			if((0 <= nPlayNumber) && (VoiceData.Length > nPlayNumber))
 			{
-				//対象のVoice再生デバイスが再生中ではない場合
-				if(!(Voice[nLoop].Source.isPlaying))
+				//Voice再生デバイス中から、再生中でないVoiceを探索する
+				for(int nLoop = 0 ; nLoop < Voice.Length ; nLoop ++)
 				{
-					Voice[nLoop].Source.clip	= VoiceData[nPlayNumber];	//指定された再生番号のVoiceを、Voice再生デバイスに設定
-					Voice[nLoop].Source.volume	= Voice[nLoop].fVolume;		//再生ボリューム設定
-					Voice[nLoop].Source.Play();								//Voiceを再生
-					
-					//メソッドから抜ける
-					return;
+					//対象のVoice再生デバイスが再生中ではない場合
+					if(!(Voice[nLoop].Source.isPlaying))
+					{
+						Voice[nLoop].Source.clip	= VoiceData[nPlayNumber];	//指定された再生番号のVoiceを、Voice再生デバイスに設定
+						Voice[nLoop].Source.volume	= Voice[nLoop].fVolume;		//再生ボリューム設定
+						Voice[nLoop].Source.Play();								//Voiceを再生
+
+						//メソッドから抜ける
+						return;
+					}
+				}
+				//Voice再生デバイスを全て探索し終えた場合
+				{
+					//エラーログ出力 - Voice再生デバイスが全て使われている
+					Debug.Log("(Voice)Voice再生デバイスが全て使われています。");
 				}
 			}
-			//Voice再生デバイスを全て探索し終えた場合
-			{
-				//エラーログ出力 - Voice再生デバイスが全て使われている
-				Debug.Log("(Voice)Voice再生デバイスが全て使われています。");
-			}
-		}
-		//上記条件に当てはまらなかった場合(再生番号の指定が間違っていた場合)
-		else
-		{
-			//条件毎に原因を載せたエラーログを出力する
-			if(0 > nPlayNumber)
-			{
-				//エラーログ出力 - 再生番号がマイナス値
-				Debug.Log("(Voice)指定された再生番号がマイナス値です。 再生番号：" + nPlayNumber);
-			}
-			else if (VoiceData.Length <= nPlayNumber)
-			{
-				//エラーログ出力 - Voiceの登録最大数を超える
-				Debug.Log("(Voice)指定された再生番号は登録数を超えています。 再生番号：" + nPlayNumber + "　Voice登録数：" + VoiceData.Length);
-			}
+			//上記条件に当てはまらなかった場合(再生番号の指定が間違っていた場合)
 			else
 			{
-				//エラーログ出力 - 不明
-				Debug.Log("Unknown Error");
+				//条件毎に原因を載せたエラーログを出力する
+				if (0 > nPlayNumber)
+				{
+					//エラーログ出力 - 再生番号がマイナス値
+					Debug.Log("(Voice)指定された再生番号がマイナス値です。 再生番号：" + nPlayNumber);
+				}
+				else if (VoiceData.Length <= nPlayNumber)
+				{
+					//エラーログ出力 - Voiceの登録最大数を超える
+					Debug.Log("(Voice)指定された再生番号は登録数を超えています。 再生番号：" + nPlayNumber + "　Voice登録数：" + VoiceData.Length);
+				}
+				else
+				{
+					//エラーログ出力 - 不明
+					Debug.Log("Unknown Error");
+				}
+
+				//メソッドから抜ける
+				return;
 			}
-			
-			//メソッドから抜ける
-			return;
 		}
 	}
 	
@@ -626,46 +677,50 @@ public class SoundManager : MonoBehaviour
 	//====================================================================================================
 	public void StopVoice(int nPlayNumber)
 	{
-		//①指定された再生番号が0以上(マイナス値指定×)、②且つVoiceの登録最大数を上回っていない場合
-		if ((0 <= nPlayNumber) && (VoiceData.Length > nPlayNumber))
+		//Voiceデバイスが生成されている場合
+		if(bVoiceUseFlag)
 		{
-			//Voice再生デバイス中から、再生中の同名Voiceを探索する
-			for (int nLoop = 0; nLoop < Voice.Length; nLoop++)
+			//①指定された再生番号が0以上(マイナス値指定×)、②且つVoiceの登録最大数を上回っていない場合
+			if((0 <= nPlayNumber) && (VoiceData.Length > nPlayNumber))
 			{
-				//①対象のVoice再生デバイスが再生中、②且つ指定した再生番号のVoiceが再生されている場合
-				if ((Voice[nLoop].Source.isPlaying) && Voice[nLoop].Source.clip == VoiceData[nPlayNumber])
+				//Voice再生デバイス中から、再生中の同名Voiceを探索する
+				for(int nLoop = 0 ; nLoop < Voice.Length ; nLoop ++)
 				{
-					Voice[nLoop].Source.Stop();				//Voiceを停止する
-					Voice[nLoop].Source.clip	= null;		//Voice再生デバイスの再生Voice設定にnull代入
-					Voice[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
+					//①対象のVoice再生デバイスが再生中、②且つ指定した再生番号のVoiceが再生されている場合
+					if((Voice[nLoop].Source.isPlaying) && Voice[nLoop].Source.clip == VoiceData[nPlayNumber])
+					{
+						Voice[nLoop].Source.Stop();				//Voiceを停止する
+						Voice[nLoop].Source.clip	= null;		//Voice再生デバイスの再生Voice設定にnull代入
+						Voice[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
 
-					//メソッドから抜ける
-					return;
+						//メソッドから抜ける
+						return;
+					}
 				}
 			}
-		}
-		//上記条件に当てはまらなかった場合(再生番号の指定が間違っていた場合)
-		else
-		{
-			//条件毎に原因を載せたエラーログを出力する
-			if(0 > nPlayNumber)
-			{
-				//エラーログ出力 - 再生番号がマイナス値
-				Debug.Log("(Voice)指定された再生番号がマイナス値です。 再生番号：" + nPlayNumber);
-			}
-			else if (VoiceData.Length <= nPlayNumber)
-			{
-				//エラーログ出力 - Voiceの登録最大数を超える
-				Debug.Log("(Voice)指定された再生番号は登録数を超えています。 再生番号：" + nPlayNumber + "　Voice登録数：" + VoiceData.Length);
-			}
+			//上記条件に当てはまらなかった場合(再生番号の指定が間違っていた場合)
 			else
 			{
-				//エラーログ出力 - 不明
-				Debug.Log("Unknown Error");
+				//条件毎に原因を載せたエラーログを出力する
+				if (0 > nPlayNumber)
+				{
+					//エラーログ出力 - 再生番号がマイナス値
+					Debug.Log("(Voice)指定された再生番号がマイナス値です。 再生番号：" + nPlayNumber);
+				}
+				else if (VoiceData.Length <= nPlayNumber)
+				{
+					//エラーログ出力 - Voiceの登録最大数を超える
+					Debug.Log("(Voice)指定された再生番号は登録数を超えています。 再生番号：" + nPlayNumber + "　Voice登録数：" + VoiceData.Length);
+				}
+				else
+				{
+					//エラーログ出力 - 不明
+					Debug.Log("Unknown Error");
+				}
+
+				//メソッドから抜ける
+				return;
 			}
-			
-			//メソッドから抜ける
-			return;
 		}
 	}
 	
@@ -678,12 +733,16 @@ public class SoundManager : MonoBehaviour
 	//====================================================================================================
 	public void StopAllVoice()
 	{
-		//Voice再生デバイス分だけループする
-		for(int nLoop = 0 ; nLoop < Voice.Length ; nLoop++)
+		//Voiceデバイスが生成されている場合
+		if(bVoiceUseFlag)
 		{
-			Voice[nLoop].Source.Stop();				//Voiceを停止する
-			Voice[nLoop].Source.clip	= null;		//Voice再生デバイスの再生Voice設定にnull代入
-			Voice[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
+			//Voice再生デバイス分だけループする
+			for(int nLoop = 0 ; nLoop < Voice.Length ; nLoop ++)
+			{
+				Voice[nLoop].Source.Stop();				//Voiceを停止する
+				Voice[nLoop].Source.clip	= null;		//Voice再生デバイスの再生Voice設定にnull代入
+				Voice[nLoop].fVolume		= 1.0f;		//再生ボリュームを最大に設定
+			}
 		}
 	}
 }
