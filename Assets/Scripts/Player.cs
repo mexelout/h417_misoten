@@ -19,7 +19,7 @@ public class Player : MonoBehaviour {
 	private int anmRotHash;
 	private int anmStumbleHash;
 	public float jumpPower;
-	public float jumpPowerDefault = 100;
+	public float jumpPowerDefault = 250;
 
 	// BoundsJoint関連
 	public Vector3 p = new Vector3(0.0f,0.0f,0.0f);
@@ -30,7 +30,6 @@ public class Player : MonoBehaviour {
 
 	public Bezier myBezier;
 	public float t = 0f;
-
 
 	// フィニッシュの処理をここに書いているのでここでカウント(ゲームマネージャに後で移行)
 	public int frameCount;
@@ -56,7 +55,6 @@ public class Player : MonoBehaviour {
 		frameCount = 0;
 		isPlay = true;
 		isFly = false;
-
 	}
 
 	void Update() {
@@ -68,14 +66,11 @@ public class Player : MonoBehaviour {
 		float vertical = speed * Time.deltaTime;
 		float horizontal = Input.GetAxis("Horizontal");
 
-		if(gm != null && gm.GetStartCount() > 0)
+		if((gm != null && gm.GetStartCount() > 0))
 			vertical *= 0;
 
 		if(roadJoint.name.Contains("Parabola")) {
 			Vector3 vec = myBezier.GetPointAtTime(t);
-//			Vector3 dis = roadJoint.transform.position - roadJoint.prevJoint.transform.position;
-//			vec.x = roadJoint.prevJoint.transform.position.x + dis.x * t;
-//			vec.z = roadJoint.prevJoint.transform.position.z + dis.z * t;
 			transform.position = vec;
 			t += 0.005f;
 			if(t > 1f)
@@ -84,18 +79,30 @@ public class Player : MonoBehaviour {
 			transform.Translate(0, 0, vertical);
 		}
 
-		if(anm.GetBool(anmStumbleHash) == false)
-		{
+		if(anm.GetBool(anmStumbleHash) == false) {
 			anm.SetFloat(anmSpeedHash, vertical);
 		}
 
 
 		if(Input.GetAxis("Jump") > 0) {
-			if(anm.GetBool(anmRotHash) == false && isFly == false && roadJoint.name.Contains("Road")) {
+			if(anm.GetBool(anmRotHash) == false && anm.GetBool(anmJumpHash) == false && isFly == false && roadJoint.name.Contains("Road")) {
 				anm.SetBool(anmRotHash, true);
-				rigidbody.AddForce(Vector3.up * jumpPower / 10, ForceMode.Impulse);
+				rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Force);
 				isFly = true;
 			}
+		}
+
+		if(roadJoint.prevJoint) {
+			Vector3 prev = roadJoint.prevJoint.transform.position + (roadJoint.prevJoint.transform.right * (roadNumber - 1) * 3);
+			prev.y = 0;
+			Vector3 next = roadJoint.transform.position + (roadJoint.transform.right * (roadNumber - 1) * 3);
+			next.y = 0;
+			Vector3 p = transform.position;
+			p.y = 0;
+			Vector3 diff = p - prev;
+			Vector3 to = next - prev;
+			float d = (to.x * diff.z - to.z * diff.x) / to.magnitude;
+			transform.position += roadJoint.prevJoint.transform.right * (d * 0.75f);
 		}
 
 		if(horizontal < 0 && !isChangeRoadNumber) {
@@ -194,6 +201,10 @@ public class Player : MonoBehaviour {
 		speed = speedDefault;
 	}
 
+	public void UndoJumpPower() {
+		jumpPower = jumpPowerDefault;
+	}
+
 	void TargetLock() {
 		if(roadJoint.name.Contains("Road") || roadJoint.name.Contains("Parabola")) {
 			// トランスフォームはクローンができないのでそのまま
@@ -201,11 +212,11 @@ public class Player : MonoBehaviour {
 			Vector3 lookAt = t.position;
 			Vector3 copyLookAt = new Vector3(lookAt.x, lookAt.y, lookAt.z);
 			lookAt.y = transform.position.y;
-			if(roadJoint.name.Contains("Road")) {
-				Vector3 offset = roadJoint.transform.right * ((roadNumber - 1.0f) * 3.0f);
-				lookAt.x += offset.x;
-				lookAt.z += offset.z;
-			}
+			//if(roadJoint.name.Contains("Road")) {
+				//Vector3 offset = roadJoint.transform.right * ((roadNumber - 1.0f) * 3.0f);
+				//lookAt.x += offset.x;
+				//lookAt.z += offset.z;
+			//}
 			Vector3 forward = transform.forward;
 			Vector3 targetDir = lookAt - transform.position;
 			lookAt = (targetDir - (forward * targetDir.magnitude)) * 0.1f;
@@ -223,6 +234,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void EndRotate() {
+		anm.SetBool(anmJumpHash, true);
 		anm.SetBool(anmRotHash, false);
 	}
 	public void StartStumble() {
