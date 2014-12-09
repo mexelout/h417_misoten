@@ -91,7 +91,7 @@ public class Player : MonoBehaviour {
 			}
 		}
 
-		speed -= (speed - speedDefault) * 0.01f;
+		speed -= (speed - speedDefault) * 0.005f;
 
 		line.SetPosition(0, new Vector3(0, -4, 2));
 		line.SetPosition(1, new Vector3((speed / speedDefault) * 5, -4, 1));

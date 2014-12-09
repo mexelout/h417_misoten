@@ -18,6 +18,9 @@ public class Dash : SpecialFloor {
 		player.speed = player.speed * 1.5f;
 		player.CancelInvoke("UndoSpeed");
 		player.Invoke("UndoSpeed", 3);
+		if(player.speed > 50) {
+			player.speed = 50;
+		}
 		try {
 			FindObjectOfType<ScoreManager>().PlusNowScore(100);
 		} catch {
