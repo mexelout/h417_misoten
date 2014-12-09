@@ -48,20 +48,17 @@ public class MOBManager : MonoBehaviour
 		//確保した配列数だけループ
 		for (int nLoop = 0; nLoop < Mobs.Count; nLoop++)
 		{
-			Debug.Log(Mobs[nLoop].name + "　　ループ数：" + nLoop);
-
 			//デバイスが登録されていない場合を考慮してtry文使用
 			try
 			{
 				//オブジェクトに設定されているサウンドスピーカーを取得して、歓声1を再生する
-				Mobs[nLoop].GetComponent<SoundSpeaker>().PlaySE((int)(SE_NAME.SE_CHEER1));
+				Mobs[nLoop].GetComponent<SoundSpeaker>().PlaySE((int)(SE_NAME.SE_CHEER1) , true);
 			}
 			catch (Exception e)
 			{
 				Debug.Log("オブジェクトが存在しない。");
 			}
 		}
-		Debug.Log(Mobs.Count);
 	}
 
 	//====================================================================================================
@@ -199,7 +196,7 @@ public class MOBManager : MonoBehaviour
 				try
 				{
 					//オブジェクトに設定されているサウンドスピーカーを取得して、歓声1を再生する
-					Mobs[nLoop].GetComponent<SoundSpeaker>().PlaySE((int)(SE_NAME.SE_CHEER1));
+					Mobs[nLoop].GetComponent<SoundSpeaker>().PlaySE((int)(SE_NAME.SE_CHEER1) , true);
 				}
 				catch (Exception e)
 				{
