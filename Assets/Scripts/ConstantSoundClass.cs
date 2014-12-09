@@ -43,9 +43,7 @@ namespace CommonSound
 	//SEの名前を宣言(int型を基準に設定)
 	enum SE_NAME : int
 	{
-		SE_TEST1 = 0	,		//ピチューン
-		SE_TEST2		,		//マスタースパーク
-		SE_CHEER1		,		//歓声1
+		SE_CHEER1 = 0	,		//歓声1
 		SE_CHEER2		,		//歓声2
 		SE_CHEER3		,		//歓声3
 	};

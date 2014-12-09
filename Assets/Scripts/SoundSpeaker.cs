@@ -75,7 +75,7 @@ public class SoundSpeaker : MonoBehaviour
 			for(int nLoop = 0 ; nLoop < SE.Length ; nLoop++)
 			{
 				SE[nLoop].Source			= gameObject.AddComponent<AudioSource>();			//SE登録配列毎に、SEを取得してSE再生デバイスに割り当てる
-				SE[nLoop].Source.loop		= false;											//SE再生デバイスにループ設定OFF
+				SE[nLoop].Source.loop		= true;											//SE再生デバイスにループ設定OFF
 				SE[nLoop].Source.clip		= null;												//再生SE情報をnull設定
 				SE[nLoop].nVolumeFadeSpeed	= ConstantScore.VOLUME_FADE_DEFALUT_SPEED;			//フェード速度初期化
 				SE[nLoop].fVolume			= ConstantScore.VOLUME_MAX;							//SE再生ボリューム初期化

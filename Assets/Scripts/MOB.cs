@@ -20,6 +20,25 @@ public class MOB : MonoBehaviour
 	//++++++++++ パブリック ++++++++++
 
 	//====================================================================================================
+	//メソッド名	：Awake
+	//役割			：コンストラクタ的な
+	//引数			：void
+	//戻り値		：void
+	//作成者		：Nomura Syouhei
+	//====================================================================================================
+	void Awake()
+	{
+		//******************** 初期化処理 ********************
+		//コンポーネント取得(デバイス生成)
+		SoundSpeaker = this.GetComponent<SoundSpeaker>();	//サウンドスピーカー
+		ScrollDevice = this.GetComponent<TextureScroll>();	//テスクチャスクロールデバイス
+
+		Debug.Log(this.name);
+		//生成したこのMOBを、MOBManagerに格納する
+		GameObject.Find("MOBManager").GetComponent<MOBManager>().SetMobAddress(this.name, -1);
+	}
+
+	//====================================================================================================
 	//メソッド名	：Start
 	//役割			：実行時に呼び出されるメソッド
 	//引数			：void
@@ -28,13 +47,7 @@ public class MOB : MonoBehaviour
 	//====================================================================================================
 	void Start()
 	{
-		//******************** 初期化処理 ********************
-		//コンポーネント取得(デバイス生成)
-		SoundSpeaker	= this.GetComponent<SoundSpeaker>();	//サウンドスピーカー
-		ScrollDevice	= this.GetComponent<TextureScroll>();	//テスクチャスクロールデバイス
-
-		//生成したこのMOBを、MOBManagerに格納する
-		GameObject.Find("MOBManager").GetComponent<MOBManager>().SetMobAddress(this.name , -1);
+		
 	}
 
 	//====================================================================================================
