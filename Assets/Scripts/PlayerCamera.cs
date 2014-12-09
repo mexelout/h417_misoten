@@ -20,10 +20,10 @@ public class PlayerCamera : MonoBehaviour {
 			if(player.isFly) {
 				back.y = 0;
 				back = back.normalized * 4.5f;
-				back.y += 2;
+				back.y += 1.5f;
 			} else {
 				back *= 3.5f;
-				back += player.transform.up * 2;
+				back += player.transform.up * 1.5f;
 			}
 			Vector3 purpose_pos = player.gameObject.transform.position + back;
 			Vector3 diff_vec = purpose_pos - camera_pos;
