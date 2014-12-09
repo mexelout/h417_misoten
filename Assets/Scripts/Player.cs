@@ -36,6 +36,8 @@ public class Player : MonoBehaviour {
 		private set { _roadJoint = value; }
 	}
 
+	private LineRenderer line;
+
 	private float offsetSide;
 
 	void Start() {
@@ -50,6 +52,8 @@ public class Player : MonoBehaviour {
 		frameCount = 0;
 		isPlay = true;
 		isFly = false;
+
+		line = gameObject.GetComponent<LineRenderer>();
 	}
 
 	void Update() {
@@ -80,14 +84,19 @@ public class Player : MonoBehaviour {
 
 
 		if(Input.GetAxis("Jump") > 0) {
-			if(anm.GetBool(anmRotHash) == false && anm.GetBool(anmJumpHash) == false && isFly == false && roadJoint.name.Contains("Road")) {
+			if(anm.GetBool(anmRotHash) == false && anm.GetBool(anmJumpHash) == false && isFly == false && roadJoint.name.Contains("Road") && anm.GetBool(anmStumbleHash) == false) {
 				anm.SetBool(anmRotHash, true);
 				rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 				isFly = true;
 			}
 		}
 
-		if(roadJoint.prevJoint) {
+		speed -= (speed - speedDefault) * 0.01f;
+
+		line.SetPosition(0, new Vector3(0, -4, 2));
+		line.SetPosition(1, new Vector3((speed / speedDefault) * 5, -4, 1));
+
+		if(roadJoint.prevJoint && anm.GetBool(anmStumbleHash) == false) {
 //			Vector3 prev = roadJoint.prevJoint.transform.position + (roadJoint.prevJoint.transform.right * (roadNumber - 1) * 3);
 //			prev.y = 0;
 //			Vector3 next = roadJoint.transform.position + (roadJoint.transform.right * (roadNumber - 1) * 3);
@@ -211,7 +220,7 @@ public class Player : MonoBehaviour {
 	}
 
 	public void UndoSpeed() {
-		speed = speedDefault;
+		//speed = speedDefault;
 	}
 
 	public void UndoJumpPower() {
