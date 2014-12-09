@@ -33,7 +33,6 @@ public class MOB : MonoBehaviour
 		SoundSpeaker = this.GetComponent<SoundSpeaker>();	//サウンドスピーカー
 		ScrollDevice = this.GetComponent<TextureScroll>();	//テスクチャスクロールデバイス
 
-		Debug.Log(this.name);
 		//生成したこのMOBを、MOBManagerに格納する
 		GameObject.Find("MOBManager").GetComponent<MOBManager>().SetMobAddress(this.name, -1);
 	}

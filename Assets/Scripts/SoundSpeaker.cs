@@ -311,10 +311,11 @@ public class SoundSpeaker : MonoBehaviour
 	//メソッド名	：PlaySE
 	//役割			：指定したSEを再生する
 	//引数			：(int nPlayNumber)		再生番号
+	//				　(bool bLoopFlag)		ループ設定【true：ループする　false：ループしない】
 	//戻り値		：void
 	//作成者		：Nomura Syouhei
 	//====================================================================================================
-	public void PlaySE(int nPlayNumber)
+	public void PlaySE(int nPlayNumber , bool bLoopFlag)
 	{
 		//******************** 変数宣言 ********************
 		AudioClip SEBuffer	= SoundManager.GetSE(nPlayNumber);		//サウンドマネージャーからSEデータを取得する
@@ -332,6 +333,7 @@ public class SoundSpeaker : MonoBehaviour
 					//対象のSE再生デバイスが再生中ではない場合
 					if(!(SE[nLoop].Source.isPlaying))
 					{
+						SE[nLoop].Source.loop	= bLoopFlag;				//ループ設定
 						SE[nLoop].Source.clip	= SEBuffer;					//指定された再生番号のSEを、SE再生デバイスに設定
 						SE[nLoop].Source.volume	= SE[nLoop].fVolume;		//再生ボリューム設定
 						SE[nLoop].Source.Play();							//SEを再生
