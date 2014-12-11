@@ -18,6 +18,7 @@ public class Player : MonoBehaviour {
 	private int anmJumpHash;
 	private int anmRotHash;
 	private int anmStumbleHash;
+	private int anmLandingHash;
 	public float jumpPower;
 	public float jumpPowerDefault = 250;
 
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour {
 		anmJumpHash = Animator.StringToHash("Jump");
 		anmRotHash = Animator.StringToHash("Rotate");
 		anmStumbleHash = Animator.StringToHash("Stumble");
+		anmLandingHash = Animator.StringToHash("Landing");
 		speed = speedDefault;
 		jumpPower = jumpPowerDefault;
 		frameCount = 0;
@@ -65,13 +67,13 @@ public class Player : MonoBehaviour {
 		float vertical = speed * Time.deltaTime;
 		float horizontal = Input.GetAxis("Horizontal");
 
-		if((gm != null && gm.GetStartCount() > 0))
+		if((gm != null && gm.GetStartCount() > 0) || anm.GetBool(anmLandingHash))
 			vertical *= 0;
 
 		if(roadJoint.name.Contains("Parabola")) {
 			Vector3 vec = myBezier.GetPointAtTime(t);
 			transform.position = vec;
-			t += 0.005f;
+			t += 0.005f * (speed / speedDefault);
 			if(t > 1f)
 				t = 0f;
 		} else {
@@ -94,21 +96,10 @@ public class Player : MonoBehaviour {
 		speed -= (speed - speedDefault) * 0.005f;
 
 		line.SetPosition(0, new Vector3(0, -4, 2));
-		line.SetPosition(1, new Vector3((speed / speedDefault) * 5, -4, 1));
+		line.SetPosition(1, new Vector3(0, -4, 2) + new Vector3(5, 0, -1).normalized * (speed / speedDefault) * 5);
 
 		if(roadJoint.prevJoint && anm.GetBool(anmStumbleHash) == false) {
-//			Vector3 prev = roadJoint.prevJoint.transform.position + (roadJoint.prevJoint.transform.right * (roadNumber - 1) * 3);
-//			prev.y = 0;
-//			Vector3 next = roadJoint.transform.position + (roadJoint.transform.right * (roadNumber - 1) * 3);
-//			next.y = 0;
-//			Vector3 p = transform.position;
-//			p.y = 0;
-//			Vector3 diff = p - prev;
-//			Vector3 to = next - prev;
-//			float d = (to.x * diff.z - to.z * diff.x) / to.magnitude;
-//			transform.position += roadJoint.prevJoint.transform.right * (d * 0.75f);
 			if(horizontal < 0) {
-				//roadNumber -= (roadNumber > 0) ? 1 : 0;
 				float movingSpeed = horizontal * 0.5f;
 				offsetSide += movingSpeed;
 				if(offsetSide < -4.5f) {
@@ -116,9 +107,8 @@ public class Player : MonoBehaviour {
 				} else {
 					transform.position += roadJoint.transform.right * movingSpeed;
 				}
-				isChangeRoadNumber = true;
+				isChangeRoadNumber = true;       
 			} else if(horizontal > 0) {
-				//roadNumber += (roadNumber < 2) ? 1 : 0;
 				float movingSpeed = horizontal * 0.5f;
 				offsetSide += movingSpeed;
 				if(offsetSide > 4.5f) {
@@ -174,6 +164,9 @@ public class Player : MonoBehaviour {
 		}
 		try {
 			RoadJoint rj = collider.gameObject.GetComponent<RoadJoint>();
+			if(rj.landing) {
+				ToggleLandingAnimation(rj);
+			}
 			roadJoint = rj.nextJoint.GetComponent<RoadJoint>();;
 			if(roadJoint.name.Contains("Parabola")) {
 				Vector3 p = new Vector3(0.0f,0.0f,0.0f);
@@ -264,5 +257,14 @@ public class Player : MonoBehaviour {
 	}
 	public void EndStumble() {
 		anm.SetBool(anmStumbleHash, false);
+	}
+
+	private void ToggleLandingAnimation(RoadJoint rj = null) {
+		anm.SetBool(anmLandingHash, !anm.GetBool(anmLandingHash));
+		if(rj) {
+			Invoke("ToggleLandingAnimation", rj.landingWaitTime);
+			if(rj.landingEffect) Instantiate(rj.landingEffect);
+			if(rj.landingCamera) Instantiate(rj.landingCamera);
+		}
 	}
 }
