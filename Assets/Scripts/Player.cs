@@ -165,7 +165,12 @@ public class Player : MonoBehaviour {
 		try {
 			RoadJoint rj = collider.gameObject.GetComponent<RoadJoint>();
 			if(rj.landing) {
-				ToggleLandingAnimation(rj);
+				ToggleLandingAnimation();
+				if(rj) {
+					Invoke("ToggleLandingAnimation", rj.landingWaitTime);
+					if(rj.landingEffect) Instantiate(rj.landingEffect);
+					if(rj.landingCamera) Instantiate(rj.landingCamera);
+				}
 			}
 			roadJoint = rj.nextJoint.GetComponent<RoadJoint>();;
 			if(roadJoint.name.Contains("Parabola")) {
@@ -259,12 +264,7 @@ public class Player : MonoBehaviour {
 		anm.SetBool(anmStumbleHash, false);
 	}
 
-	private void ToggleLandingAnimation(RoadJoint rj = null) {
+	private void ToggleLandingAnimation() {
 		anm.SetBool(anmLandingHash, !anm.GetBool(anmLandingHash));
-		if(rj) {
-			Invoke("ToggleLandingAnimation", rj.landingWaitTime);
-			if(rj.landingEffect) Instantiate(rj.landingEffect);
-			if(rj.landingCamera) Instantiate(rj.landingCamera);
-		}
 	}
 }
