@@ -239,7 +239,7 @@ public class Player : MonoBehaviour {
 			}
 			Vector3 forward = transform.forward;
 			Vector3 targetDir = lookAt - transform.position;
-			lookAt = (targetDir - (forward * targetDir.magnitude)) * 0.1f;
+			lookAt = (targetDir - (forward * targetDir.magnitude)) * 0.5f;
 			lookAt += forward * targetDir.magnitude;
 			lookAt += transform.position;
 			t.position = lookAt;
