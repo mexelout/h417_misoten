@@ -168,6 +168,8 @@ public class Player : MonoBehaviour {
 				ToggleLandingAnimation();
 				if(rj) {
 					Invoke("ToggleLandingAnimation", rj.landingWaitTime);
+					rj.landingEffect.transform.position = transform.position;
+					print("test");
 					if(rj.landingEffect) Instantiate(rj.landingEffect);
 					if(rj.landingCamera) Instantiate(rj.landingCamera);
 				}

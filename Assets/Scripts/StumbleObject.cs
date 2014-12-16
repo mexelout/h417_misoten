@@ -16,10 +16,10 @@ public class StumbleObject : SpecialFloor {
 	public override void Execute(Player player)
 	{
 		player.speed = player.speedDefault * 0.3f;
-		player.Invoke("UndoSpeed", 2.1f);
+		player.Invoke("UndoSpeed", 1.35f);
 		try {
 			player.StartStumble();
-			player.Invoke ("EndStumble",2.1f);
+			player.Invoke ("EndStumble",1.35f);
 	//		FindObjectOfType<ScoreManager>().AddScore(100);
 		} catch {
 		}
