@@ -88,6 +88,7 @@ public class Player : MonoBehaviour {
 		if(Input.GetAxis("Jump") > 0) {
 			if(anm.GetBool(anmRotHash) == false && anm.GetBool(anmJumpHash) == false && isFly == false && roadJoint.name.Contains("Road") && anm.GetBool(anmStumbleHash) == false) {
 				anm.SetBool(anmRotHash, true);
+				anm.Play("Rotate");
 				rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 				isFly = true;
 			}
