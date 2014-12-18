@@ -41,6 +41,16 @@ public class Player : MonoBehaviour {
 
 	private float offsetSide;
 
+	// ジャンプ時の円
+	[SerializeField]
+	private GameObject _circle;
+	public GameObject circle {
+		get { return _circle; }
+		private set { _circle = value; }
+	}
+	// 生成後にデストロイするので保持
+	private Circle generateCircle;
+
 	void Start() {
 		gm = GameObject.FindObjectOfType<GameManager>();
 		anm = GetComponent<Animator>();
@@ -86,7 +96,7 @@ public class Player : MonoBehaviour {
 
 
 		if(Input.GetAxis("Jump") > 0) {
-			if(anm.GetBool(anmRotHash) == false && anm.GetBool(anmJumpHash) == false && isFly == false && roadJoint.name.Contains("Road") && anm.GetBool(anmStumbleHash) == false) {
+			if(anm.GetBool(anmRotHash) == false && anm.GetBool(anmJumpHash) == false && isFly == false && roadJoint.name.Contains("Road") && anm.GetBool(anmStumbleHash) == false && anm.GetBool(anmLandingHash) == false) {
 				anm.SetBool(anmRotHash, true);
 				anm.Play("Rotate");
 				rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
@@ -99,7 +109,7 @@ public class Player : MonoBehaviour {
 		line.SetPosition(0, new Vector3(0, -4, 2));
 		line.SetPosition(1, new Vector3(0, -4, 2) + new Vector3(5, 0, -1).normalized * (speed / speedDefault) * 5);
 
-		if(roadJoint.prevJoint && anm.GetBool(anmStumbleHash) == false) {
+		if(roadJoint.prevJoint && anm.GetBool(anmStumbleHash) == false && anm.GetBool(anmLandingHash) == false) {
 			if(horizontal < 0) {
 				float movingSpeed = horizontal * 0.5f;
 				offsetSide += movingSpeed;
@@ -154,8 +164,7 @@ public class Player : MonoBehaviour {
 		isOffBuilding = true;
 	}
 
-	private void OnTriggerEnter(Collider collider) 
-	{
+	private void OnTriggerEnter(Collider collider) {
 		try {
 			SpecialFloor sf = collider.gameObject.GetComponent<SpecialFloor>();
 			sf.Execute(this);
@@ -169,13 +178,21 @@ public class Player : MonoBehaviour {
 				ToggleLandingAnimation();
 				if(rj) {
 					Invoke("ToggleLandingAnimation", rj.landingWaitTime);
-					rj.landingEffect.transform.position = transform.position;
-					print("test");
-					if(rj.landingEffect) Instantiate(rj.landingEffect);
+					if(rj.landingEffect) (Instantiate(rj.landingEffect) as GameObject).transform.position = transform.position;
 					if(rj.landingCamera) Instantiate(rj.landingCamera);
 				}
 			}
-			roadJoint = rj.nextJoint.GetComponent<RoadJoint>();;
+			roadJoint = rj.nextJoint.GetComponent<RoadJoint>();
+			if(generateCircle) {
+				Destroy(generateCircle.gameObject);
+			}
+			if(roadJoint.nextJoint) {
+				if(roadJoint.nextJoint.name.Contains("Parabola") || roadJoint.nextJoint.name.Contains("Jump")) {
+					generateCircle = (Instantiate(circle) as GameObject).GetComponent<Circle>();
+					generateCircle.player = gameObject;
+					generateCircle.targetPosition = roadJoint.transform.position.Clone();
+				}
+			}
 			if(roadJoint.name.Contains("Parabola")) {
 				Vector3 p = new Vector3(0.0f,0.0f,0.0f);
 				Vector3 p0 =new  Vector3(0.0f,0.0f,0.0f);
