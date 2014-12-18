@@ -39,24 +39,30 @@ public class SceneManager : MonoBehaviour {
 
 	private void RateSetScene() {
 		if(current == titleScene) {
-			instScene = (GameObject)Instantiate(tutorialScene);
-			current = tutorialScene;
+			SetScene(tutorialScene);
 			return;
 		}
 		if(current == tutorialScene) {
-			instScene = (GameObject)Instantiate(gameScene);
-			current = gameScene;
+			SetScene(gameScene);
 			return;
 		}
 		if(current == gameScene) {
-			instScene = (GameObject)Instantiate(resultScene);
-			current = resultScene;
+			SetScene(resultScene);
 			return;
 		}
 		if(current == resultScene) {
-			instScene = (GameObject)Instantiate(titleScene);
-			current = titleScene;
+			SetScene(titleScene);
 			return;
 		}
+	}
+
+	public void SetScene(GameObject inst) {
+		instScene = (GameObject)Instantiate(inst);
+		current = inst;
+	}
+
+	public void ForceDestroyScene() {
+		Object.Destroy(instScene);
+		FadeIn();
 	}
 }
