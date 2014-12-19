@@ -95,7 +95,7 @@ public class Player : MonoBehaviour {
 		}
 
 
-		if(Input.GetAxis("Jump") > 0) {
+		if(Input.GetButtonDown("Jump") && generateCircle == null) {
 			if(anm.GetBool(anmRotHash) == false && anm.GetBool(anmJumpHash) == false && isFly == false && roadJoint.name.Contains("Road") && anm.GetBool(anmStumbleHash) == false && anm.GetBool(anmLandingHash) == false) {
 				anm.SetBool(anmRotHash, true);
 				anm.Play("Rotate");
@@ -146,6 +146,13 @@ public class Player : MonoBehaviour {
 		if(gm != null && gm.GetStartCount() > 0 && isPlay) {
 			frameCount++;
 		}
+
+
+		if(generateCircle) {
+			if(generateCircle.IfProcess(this)) {
+				// 1回だけ押せるようにする
+			}
+		}
 	}
 
 	private void OnCollisionEnter(Collision collision) {
@@ -188,9 +195,11 @@ public class Player : MonoBehaviour {
 			}
 			if(roadJoint.nextJoint) {
 				if(roadJoint.nextJoint.name.Contains("Parabola") || roadJoint.nextJoint.name.Contains("Jump")) {
-					generateCircle = (Instantiate(circle) as GameObject).GetComponent<Circle>();
-					generateCircle.player = gameObject;
-					generateCircle.targetPosition = roadJoint.transform.position.Clone();
+					if(roadJoint.nextJoint.GetComponent<RoadJoint>().NotCircle == false) {
+						generateCircle = (Instantiate(circle) as GameObject).GetComponent<Circle>();
+						generateCircle.player = gameObject;
+						generateCircle.targetPosition = roadJoint.transform.position.Clone();
+					}
 				}
 			}
 			if(roadJoint.name.Contains("Parabola")) {
