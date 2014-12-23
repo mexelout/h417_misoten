@@ -7,15 +7,13 @@ public class Circle : MonoBehaviour {
 	public GameObject player;
 	private Camera playerCamera;
 
-	private GameObject _dynamicCircle;
-	public GameObject dynamicCircle {
-		get { return _dynamicCircle; }
-	}
-	private GameObject _staticCircle;
-	public GameObject staticCircle {
-		get { return _staticCircle; }
-	}
-	private bool alreadyDown = false;
+	public GameObject dynamicCircle { get; private set; }
+	public GameObject staticCircle { get; private set; }
+		
+	public int state { get; private set; }
+
+	public GameObject good;
+	public GameObject fever;
 
 	// Use this for initialization
 	void Start () {
@@ -23,8 +21,9 @@ public class Circle : MonoBehaviour {
 		if(pc) {
 			playerCamera = pc.gameObject.GetComponent<Camera>();
 		}
-		_dynamicCircle = transform.FindChild("DynamicCircle").gameObject;
-		_staticCircle = transform.FindChild("StaticCircle").gameObject;
+		dynamicCircle = transform.FindChild("DynamicCircle").gameObject;
+		staticCircle = transform.FindChild("StaticCircle").gameObject;
+		state = 0;
 	}
 	
 	// Update is called once per frame
@@ -40,15 +39,15 @@ public class Circle : MonoBehaviour {
 			pos.y = -5 + 10f * pos.y;
 			transform.position = pos;
 		}
-		if(_dynamicCircle) {
+		if(dynamicCircle) {
 			float dis = (player.transform.position - targetPosition).magnitude;
 			dis = (dis / 60f) * 7;
-			_dynamicCircle.transform.localScale = new Vector3(3 + dis, 3 + dis, 1);
+			dynamicCircle.transform.localScale = new Vector3(3 + dis, 3 + dis, 1);
 		}
 	}
 
 	public bool IfProcess(Player player) {
-		if(alreadyDown) return false;
+		if(state > 0) return false;
 
 		float dif = dynamicCircle.transform.localScale.magnitude - staticCircle.transform.localScale.magnitude;
 		// 3以下くらいがちょうど重なったと思えるサイズ
@@ -56,11 +55,14 @@ public class Circle : MonoBehaviour {
 			ScoreManager sm = FindObjectOfType<ScoreManager>();
 			if(3 < dif && dif < 6) {
 				if(sm) sm.PlusNowScore(250);
+				state = 1;
+				Instantiate(good);
 				return true;
 			} else if(dif <= 3) {
+				state = 2;
 				player.speed *= 1.5f;
+				Instantiate(fever);
 				if(player.speed > 50) player.speed = 50;
-
 				if(sm) sm.PlusNowScore(500);
 				return true;
 			}

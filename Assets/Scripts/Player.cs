@@ -50,6 +50,8 @@ public class Player : MonoBehaviour {
 	}
 	// 生成後にデストロイするので保持
 	private Circle generateCircle;
+	public GameObject jumpEffect;
+	private GameObject generateJumpEffect;
 
 	void Start() {
 		gm = GameObject.FindObjectOfType<GameManager>();
@@ -111,7 +113,7 @@ public class Player : MonoBehaviour {
 
 		if(roadJoint.prevJoint && anm.GetBool(anmStumbleHash) == false && anm.GetBool(anmLandingHash) == false) {
 			if(horizontal < 0) {
-				float movingSpeed = horizontal * 0.5f;
+				float movingSpeed = -0.25f;
 				offsetSide += movingSpeed;
 				if(offsetSide < -4.5f) {
 					offsetSide = -4.5f;
@@ -120,7 +122,7 @@ public class Player : MonoBehaviour {
 				}
 				isChangeRoadNumber = true;       
 			} else if(horizontal > 0) {
-				float movingSpeed = horizontal * 0.5f;
+				float movingSpeed = 0.25f;
 				offsetSide += movingSpeed;
 				if(offsetSide > 4.5f) {
 					offsetSide = 4.5f;
@@ -150,7 +152,6 @@ public class Player : MonoBehaviour {
 
 		if(generateCircle) {
 			if(generateCircle.IfProcess(this)) {
-				// 1回だけ押せるようにする
 			}
 		}
 	}
@@ -190,8 +191,19 @@ public class Player : MonoBehaviour {
 				}
 			}
 			roadJoint = rj.nextJoint.GetComponent<RoadJoint>();
+			if(generateJumpEffect) {
+				Destroy(generateJumpEffect.gameObject);
+				generateJumpEffect = null;
+			}
 			if(generateCircle) {
+				// ステータスが良ければエフェクト生成
+				if(generateCircle.state > 0) {
+					generateJumpEffect = Instantiate(jumpEffect) as GameObject;
+					generateJumpEffect.transform.position = gameObject.transform.position;
+					generateJumpEffect.transform.parent = gameObject.transform;
+				}
 				Destroy(generateCircle.gameObject);
+				generateCircle = null;
 			}
 			if(roadJoint.nextJoint) {
 				if(roadJoint.nextJoint.name.Contains("Parabola") || roadJoint.nextJoint.name.Contains("Jump")) {
