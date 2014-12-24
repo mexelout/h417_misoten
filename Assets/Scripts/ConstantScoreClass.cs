@@ -29,6 +29,7 @@ namespace CommonScore
 		public static readonly int		JUMP				= 10;					//ジャンプ時に加算するスコア値
 		public static readonly int		ACTION				= 30;					//アクション時に加算するスコア値
 		public static readonly int		RANKING_MAX			= 10;					//ランキング用スコア保存数
+		public static readonly int		RANKING_DIGIT_MAX	= 4;					//ランキング用スコア桁数
 		public static readonly string	RANKING_DATAPASS	= "/Ranking.txt";		//ランキング保存場所
 	}
 }

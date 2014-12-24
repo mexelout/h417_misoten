@@ -72,6 +72,15 @@ public class MOBManager : MonoBehaviour
 	{
 		//サウンドテスト
 		//SoundTest();
+		//1キーで全デバイス再生
+		if (Input.GetKeyDown(KeyCode.Alpha1))
+		{
+			//確保した配列数だけループ
+			for(int nLoop = 0 ; nLoop < Mobs.Count ; nLoop ++)
+			{
+				Mobs[nLoop].GetComponent<TextureScroll>().StopHorizontalExecutionFlag(2 , false);
+			}
+		}
 	}
 
 	//********************************************************************** 以降、セッター **********************************************************************

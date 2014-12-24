@@ -96,9 +96,6 @@ public class ScoreFileOperation : MonoBehaviour
 		//配列(ランキング)の数だけループ
 		for(int nLoop = 0 ; nLoop < sArrayBuffer.Length ; nLoop ++)
 		{
-			//デバッグ用出力
-			Debug.Log(sArrayBuffer[nLoop]);
-			
 			//配列に格納されているスコアの文字列を、数値に変換して格納する
 			nRankingScore[nLoop] = int.Parse(sArrayBuffer[nLoop]);
 		}
@@ -201,8 +198,6 @@ public class ScoreFileOperation : MonoBehaviour
 			StreamWriterDevice.Close();
 			FileWriteDevice.Close();
 		}
-
-		Debug.Log("7.ここまできた");
 	}
 }
 //================================================================================ EOF ================================================================================

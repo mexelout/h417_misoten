@@ -11,6 +11,8 @@ public class ResultManager : MonoBehaviour {
 	private ScoreManager ScoreManager;
 	private ScoreFileOperation ScoreFileDevice;
 	private ScoreManager ScoreManagerClassDevice;
+	private bool bRankingPerformanceExecutionFlag		= false;		//ランキング演出実行フラグ【true：実行　false：未実行】
+	private bool bPlayerScorePerformanceExecutionFlag	= false;		//ランキング演出実行フラグ【true：実行　false：未実行】
 
 	// Use this for initialization
 	void Start () {
@@ -88,11 +90,33 @@ public class ResultManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.anyKeyDown) {
+		if (Input.anyKeyDown)
+		{
 			SceneManager sm = FindObjectOfType<SceneManager>();
 			if(sm != null) {
 				sm.NextScene();
 			}
+		}
+
+		bRankingPerformanceExecutionFlag = true;
+
+		//スコア演出実行フラグがtrue、ランキング演出実行フラグがfalseの場合
+		if(bPlayerScorePerformanceExecutionFlag && !(bRankingPerformanceExecutionFlag))
+		{
+
+		}
+		//ランキング演出実行フラグがtrue、スコア演出実行フラグがfalseの場合
+		if(bRankingPerformanceExecutionFlag && !(bPlayerScorePerformanceExecutionFlag))
+		{
+			//******************** 変数宣言 ********************
+			float fMoveSpeed			= 0.2f;									//カメラ移動速度
+			GameObject	ResultCamera	= GameObject.Find("Camera");			//ResultScene内カメラオブジェクト
+			GameObject	GazePoint		= GameObject.Find("GazePoint");			//注視点指定用空オブジェクト
+
+			//########## テスト用、カメラ座標・注視点移動 ##########
+			//GazePoint.transform.Translate(0, fMoveSpeed, 0);		//注視点移動
+			//ResultCamera.transform.Translate(0, fMoveSpeed, 0);		//カメラ移動
+			//ResultCamera.transform.LookAt(GazePoint.transform);		//カメラが注視点を向くようにする
 		}
 	}
 }
