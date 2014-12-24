@@ -8,10 +8,12 @@ public class EvaluationString : MonoBehaviour {
 
 	void Start() {
 		renderer.material.color = new Color(1, 1, 1, 0);
+		transform.position += Vector3.down;
 	}
 
 	// Update is called once per frame
 	void Update () {
+		transform.position  += Vector3.up * 0.025f;
 		renderer.material.color += alpha;
 		if(renderer.material.color.a >= 1) {
 			renderer.material.color = new Color(1, 1, 1, 1);
