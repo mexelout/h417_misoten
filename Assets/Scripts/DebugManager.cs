@@ -2,28 +2,34 @@
 using System.Collections;
 
 public class DebugManager : MonoBehaviour {
-
-
 	[SerializeField]
 	private int _orderNum;
 	public int orderNum {
 		get { return _orderNum; }
 		private set { _orderNum = value; }
 	}
-
 	private int nowOrder = 0;
+
+	[SerializeField]
+	private bool _debugMode;
+	public bool debugMode {
+		get { return _debugMode; }
+		private set { _debugMode = value; }
+	}
 
 	private GameObject forceScene;
 
 	// Use this for initialization
 	void Start () {
-		Player p = FindObjectOfType<Player>();
-		if(p) {
-			RoadJoint rj = p.roadJoint;
-			for(int i = 0; i < orderNum; i++) {
-				rj = rj.nextJoint.GetComponent<RoadJoint>();
+		if(debugMode) {
+			Player p = FindObjectOfType<Player>();
+			if(p) {
+				RoadJoint rj = p.roadJoint;
+				for(int i = 0; i < orderNum; i++) {
+					rj = rj.nextJoint.GetComponent<RoadJoint>();
+				}
+				p.transform.position = rj.transform.position + Vector3.up * 20;
 			}
-			p.transform.position = rj.transform.position + Vector3.up * 20;
 		}
 	}
 	
