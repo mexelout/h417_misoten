@@ -39,6 +39,12 @@ public class RoadJoint : MonoBehaviour {
 		get { return _landingCamera; }
 		private set { _landingCamera = value; }
 	}
+	[SerializeField]
+	private bool _NotCircle;
+	public bool NotCircle {
+		get { return _NotCircle; }
+		private set { _NotCircle = value; }
+	}
 
 	void Awake() {
 		char[] n = name.ToCharArray();

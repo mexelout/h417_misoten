@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour {
 		scoreBoard = gameObject.GetComponentsInChildren<GUIText>()[1];
 		sm = GameObject.FindObjectOfType<ScoreManager>().GetComponent<ScoreManager>();
 		try {
-			sm.SetNowScore(5000);
+			sm.SetNowScore(0);
 		} catch {
 			print("not found score manager");
 		}
