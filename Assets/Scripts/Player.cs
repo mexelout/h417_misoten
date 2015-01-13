@@ -71,6 +71,7 @@ public class Player : MonoBehaviour {
 
 		roadJointIs = new Dictionary<string, bool>() {
 			{ "Road", false },
+			{ "Wall", false },
 			{ "Jump", false },
 			{ "Parabola", false },
 		};
@@ -159,6 +160,12 @@ public class Player : MonoBehaviour {
 			if(generateCircle.IfProcess(this)) {
 			}
 		}
+
+		if(roadJointIs["Wall"]) {
+			Vector3 v = rigidbody.velocity;
+			v.x = v.z = 0;
+			rigidbody.velocity = v;
+		}
 	}
 
 	private void OnCollisionEnter(Collision collision) {
@@ -184,6 +191,7 @@ public class Player : MonoBehaviour {
 			return;
 		} catch {
 			//print("not special floor");
+
 		}
 		try {
 			RoadJoint rj = collider.gameObject.GetComponent<RoadJoint>();
@@ -220,7 +228,12 @@ public class Player : MonoBehaviour {
 					}
 				}
 			}
-			if(roadJointIs["Parabola"]) {
+
+			Physics.gravity = Vector3.down * 39.2f;
+			if(roadJointIs["Wall"]) {
+				Physics.gravity = (Vector3.up * 1.5f + roadJoint.transform.up) / 2 * -39.2f;
+				transform.LookAt(roadJoint.transform);
+			} else if(roadJointIs["Parabola"]) {
 				Vector3 p = new Vector3(0.0f,0.0f,0.0f);
 				Vector3 p0 =new  Vector3(0.0f,0.0f,0.0f);
 				Vector3 p1 =new  Vector3(0.0f,0.0f,0.0f);
@@ -236,6 +249,9 @@ public class Player : MonoBehaviour {
 				p2 = p0 + dir * 0.8f;
 				p1.y = p2.y = (p0.y > p3.y) ? p0.y + 30 : p3.y + 30;
 				myBezier = new Bezier(p0, p1, p2, p3);
+			}
+			if(roadJointIs["Wall"] || roadJointIs["Jump"] || roadJointIs["Parabola"]) {
+				rigidbody.velocity = Vector3.zero;
 			}
 			return;
 		} catch {
@@ -316,6 +332,7 @@ public class Player : MonoBehaviour {
 	private void UpdateRoadJointIs() {
 		if(roadJoint) {
 			roadJointIs["Road"] = roadJoint.name.Contains("Road");
+			roadJointIs["Wall"] = roadJoint.name.Contains("Wall");
 			roadJointIs["Jump"] = roadJoint.name.Contains("Jump");
 			roadJointIs["Parabola"] = roadJoint.name.Contains("Parabola");
 		}

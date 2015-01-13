@@ -55,5 +55,11 @@ public class PlayerCamera : MonoBehaviour {
 			lookPosition = lookPosition + diffVec / 5;
 		}
 		gameObject.transform.LookAt(lookPosition);
+
+		if(player.roadJointIs["Wall"]) {
+			Vector3 euler = transform.rotation.eulerAngles;
+			euler.z = 180;
+			transform.rotation = Quaternion.Euler(euler);
+		}
 	}
 }

@@ -16,17 +16,19 @@ public class StumbleObject : SpecialFloor {
 
 	public override void Execute(Player player)
 	{
-		player.speed = player.speedDefault * 0.3f;
-		player.Invoke("UndoSpeed", 1.35f);
 		try {
+			player.speed = player.speedDefault * 0.3f;
+			player.Invoke("UndoSpeed", 1.35f);
 			player.StartStumble();
 			player.Invoke ("EndStumble",1.35f);
-	//		FindObjectOfType<ScoreManager>().AddScore(100);
+			//******************** サウンド処理(担当：野村) ********************
+			SoundSpeaker SoundDevice = GetComponent<SoundSpeaker>();				//ダッシュ床オブジェクトに内包されているSoundSpeakerスクリプトを取得する
+			SoundDevice.PlaySE((int)(CommonSound.SE_NAME.SE_FALL), false);			//ダッシュ床用SEを再生する
+
+			//		FindObjectOfType<ScoreManager>().AddScore(100);
 		} catch {
+			print("stumble error");
 		}
-		
-		//******************** サウンド処理(担当：野村) ********************
-		SoundSpeaker SoundDevice = GetComponent<SoundSpeaker>();				//ダッシュ床オブジェクトに内包されているSoundSpeakerスクリプトを取得する
-		SoundDevice.PlaySE((int)(CommonSound.SE_NAME.SE_FALL), false);			//ダッシュ床用SEを再生する
+
 	}
 }
