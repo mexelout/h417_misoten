@@ -13,12 +13,16 @@ public class Goal : SpecialFloor {
 	
 	}
 
-	public override void Execute(Player player)
-	{
+	public override void Execute(Player player) {
+		try {
+			GameManager gm = FindObjectOfType<GameManager>();
+			gm.startFinishState();
+		} catch {
+		}
+
 		try {
 			ScoreManager sm = FindObjectOfType<ScoreManager>();
-			int addScore = (player.frameCount > 200) ? 500 : 500 - (player.frameCount - 200) * 2;
-			sm.PlusNowScore(addScore);
+			sm.PlusNowScore(500);
 		} catch {
 			print("not found score manager");
 		}

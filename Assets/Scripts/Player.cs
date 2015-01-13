@@ -26,10 +26,6 @@ public class Player : MonoBehaviour {
 	public Bezier myBezier;
 	public float t = 0f;
 
-	// フィニッシュの処理をここに書いているのでここでカウント(ゲームマネージャに後で移行)
-	public int frameCount;
-	private bool isPlay;
-
 	// Next RoadJoint
 	[SerializeField]
 	private RoadJoint _roadJoint;
@@ -69,8 +65,6 @@ public class Player : MonoBehaviour {
 		anmLandingHash = Animator.StringToHash("Landing");
 		speed = speedDefault;
 		jumpPower = jumpPowerDefault;
-		frameCount = 0;
-		isPlay = true;
 		isFly = false;
 
 		line = gameObject.GetComponent<LineRenderer>();
@@ -92,7 +86,7 @@ public class Player : MonoBehaviour {
 		float vertical = speed * Time.deltaTime;
 		float horizontal = (roadJointIs["Jump"] || roadJointIs["Parabola"]) ? 0 : Input.GetAxis("Horizontal");
 
-		if((gm != null && gm.GetStartCount() > 0) || anm.GetBool(anmLandingHash))
+		if((gm != null && gm.gameState != GameManager.GameState.Play) || anm.GetBool(anmLandingHash))
 			vertical *= 0;
 
 		if(roadJointIs["Parabola"]) {
@@ -157,11 +151,6 @@ public class Player : MonoBehaviour {
 		}
 
 		TargetLock();
-
-		if(gm != null && gm.GetStartCount() > 0 && isPlay) {
-			frameCount++;
-		}
-
 
 		if(generateCircle) {
 			if(generateCircle.IfProcess(this)) {
@@ -304,8 +293,6 @@ public class Player : MonoBehaviour {
 		} else if(roadJoint.name.Contains("Jump")) {
 			transform.LookAt(roadJoint.transform);
 		}
-
-
 	}
 
 	void EndRotate() {
@@ -324,8 +311,10 @@ public class Player : MonoBehaviour {
 	}
 
 	private void UpdateRoadJointIs() {
-		roadJointIs["Road"] = roadJoint.name.Contains("Road");
-		roadJointIs["Jump"] = roadJoint.name.Contains("Jump");
-		roadJointIs["Parabola"] = roadJoint.name.Contains("Parabola");
+		if(roadJoint) {
+			roadJointIs["Road"] = roadJoint.name.Contains("Road");
+			roadJointIs["Jump"] = roadJoint.name.Contains("Jump");
+			roadJointIs["Parabola"] = roadJoint.name.Contains("Parabola");
+		}
 	}
 }
