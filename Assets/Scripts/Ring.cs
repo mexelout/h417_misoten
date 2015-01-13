@@ -18,6 +18,6 @@ public class Ring : SpecialFloor {
 	{
 		FindObjectOfType<ScoreManager>().PlusNowScore(500);
 		Destroy(gameObject); // gameobject delete
-		//Instantiate(particleAddScore);	// エフェクト（particleAddScore）を呼び出す
+		if(particleAddScore) Instantiate(particleAddScore);	// エフェクト（particleAddScore）を呼び出す
 	}
 }
