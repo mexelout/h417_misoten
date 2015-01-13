@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using CommonSound;		//サウンド用定数をまとめたスクリプト
 
 public class StumbleObject : SpecialFloor {
 
@@ -23,8 +24,9 @@ public class StumbleObject : SpecialFloor {
 	//		FindObjectOfType<ScoreManager>().AddScore(100);
 		} catch {
 		}
+		
+		//******************** サウンド処理(担当：野村) ********************
+		SoundSpeaker SoundDevice = GetComponent<SoundSpeaker>();				//ダッシュ床オブジェクトに内包されているSoundSpeakerスクリプトを取得する
+		SoundDevice.PlaySE((int)(CommonSound.SE_NAME.SE_FALL), false);			//ダッシュ床用SEを再生する
 	}
-
-
-
 }

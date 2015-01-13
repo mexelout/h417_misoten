@@ -8,8 +8,6 @@ public class DebugManager : MonoBehaviour {
 		get { return _orderNum; }
 		private set { _orderNum = value; }
 	}
-	private int nowOrder = 0;
-
 	[SerializeField]
 	private bool _debugMode;
 	public bool debugMode {

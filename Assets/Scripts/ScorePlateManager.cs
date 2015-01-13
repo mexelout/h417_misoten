@@ -88,7 +88,7 @@ public class ScorePlateManager : MonoBehaviour
 		{
 			//******************** 変数宣言 ********************
 			int nBuffer			= 0;			//バッファ
-			int nDigit			= 1000;			//桁数分割用
+			int nDigit			= 10000;		//桁数分割用
 			int nScoreBuffer	= 0;			//スコア代入用バッファ
 			String sBuffer;						//オブジェクト名格納用
 
@@ -124,8 +124,6 @@ public class ScorePlateManager : MonoBehaviour
 					//配列に格納されているPlate名と、値使用先のPlate名を比較
 					if(ScorePlates[nLoopS].name.Equals(sBuffer))
 					{
-						//
-
 						//バッファ数が0以下の場合、0を適応する
 						if(nBuffer - 1 < 0)
 						{

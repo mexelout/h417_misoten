@@ -58,8 +58,8 @@ public class SoundManager : MonoBehaviour
 	//++++++++++ プロテクト ++++++++++
 	
 	//++++++++++ パブリック ++++++++++
-	public int			nSEDeviceNumber		= ConstantScore.SE_DEVICE_NUMBER;			//SE再生デバイス生成数
-	public int			nVoiceDeviceNumber	= ConstantScore.VOICE_DEVICE_NUMBER;		//Voice再生デバイス生成数
+	public int			nSEDeviceNumber		= ConstantSound.SE_DEVICE_NUMBER;			//SE再生デバイス生成数
+	public int			nVoiceDeviceNumber	= ConstantSound.VOICE_DEVICE_NUMBER;		//Voice再生デバイス生成数
 	public AudioClip[]	BGMData;			//BGMデータ格納配列
 	public AudioClip[]	SEData;				//SEデータ格納配列
 	public AudioClip[]	VoiceData;			//Voiceデータ格納配列
@@ -103,8 +103,8 @@ public class SoundManager : MonoBehaviour
 		BGM.Source				= gameObject.AddComponent<AudioSource>();		//BGM再生デバイスを取得
 		BGM.Source.loop			= true;											//BGM再生デバイスにループ設定ON
 		BGM.Source.clip			= null;											//再生BGM情報をnull設定
-		BGM.nVolumeFadeSpeed	= ConstantScore.VOLUME_FADE_DEFALUT_SPEED;		//フェード速度初期化
-		BGM.fVolume				= ConstantScore.VOLUME_MAX;						//BGM再生ボリューム初期化
+		BGM.nVolumeFadeSpeed	= ConstantSound.VOLUME_FADE_DEFALUT_SPEED;		//フェード速度初期化
+		BGM.fVolume				= ConstantSound.VOLUME_MAX;						//BGM再生ボリューム初期化
 		BGM.bFadeIn				= false;										//BGMフェードインフラグ初期化
 		BGM.bFadeOut			= false;										//BGMフェードアウトフラグ初期化
 		
@@ -117,8 +117,8 @@ public class SoundManager : MonoBehaviour
 				SE[nLoop].Source			= gameObject.AddComponent<AudioSource>();			//SE登録配列毎に、SEを取得してSE再生デバイスに割り当てる
 				SE[nLoop].Source.loop		= false;											//SE再生デバイスにループ設定OFF
 				SE[nLoop].Source.clip		= null;												//再生SE情報をnull設定
-				SE[nLoop].nVolumeFadeSpeed	= ConstantScore.VOLUME_FADE_DEFALUT_SPEED;			//フェード速度初期化
-				SE[nLoop].fVolume			= ConstantScore.VOLUME_MAX;							//SE再生ボリューム初期化
+				SE[nLoop].nVolumeFadeSpeed	= ConstantSound.VOLUME_FADE_DEFALUT_SPEED;			//フェード速度初期化
+				SE[nLoop].fVolume			= ConstantSound.VOLUME_MAX;							//SE再生ボリューム初期化
 				SE[nLoop].bFadeIn			= false;											//SEフェードインフラグ初期化
 				SE[nLoop].bFadeOut			= false;											//SEフェードアウトフラグ初期化
 			}
@@ -133,8 +133,8 @@ public class SoundManager : MonoBehaviour
 				Voice[nLoop].Source				= gameObject.AddComponent<AudioSource>();		//Voice登録配列毎に、Voiceを取得してVoice再生デバイスに割り当てる
 				Voice[nLoop].Source.loop		= false;										//Voice再生デバイスにループ設定OFF
 				Voice[nLoop].Source.clip		= null;											//再生SE情報をnull設定
-				Voice[nLoop].nVolumeFadeSpeed	= ConstantScore.VOLUME_FADE_DEFALUT_SPEED;		//フェード速度初期化
-				Voice[nLoop].fVolume			= ConstantScore.VOLUME_MAX;						//Voice再生ボリューム初期化
+				Voice[nLoop].nVolumeFadeSpeed	= ConstantSound.VOLUME_FADE_DEFALUT_SPEED;		//フェード速度初期化
+				Voice[nLoop].fVolume			= ConstantSound.VOLUME_MAX;						//Voice再生ボリューム初期化
 				Voice[nLoop].bFadeIn			= false;										//Voiceフェードインフラグ初期化
 				Voice[nLoop].bFadeOut			= false;										//Voiceフェードアウトフラグ初期化
 			}
@@ -178,14 +178,14 @@ public class SoundManager : MonoBehaviour
 			//設定されたフェード速度を超えた場合
 			else
 			{
-				BGM.fVolume += ConstantScore.VOLUME_FADE;		//ボリュームを加算
+				BGM.fVolume += ConstantSound.VOLUME_FADE;		//ボリュームを加算
 				BGM.Source.volume	= BGM.fVolume;				//変更したボリュームを適応する
 				nFadeCounter		= 0;						//カウンターを初期化
 
 				//ボリュームが1.0f(最大値)を超えた場合
-				if (BGM.fVolume >= ConstantScore.VOLUME_MAX)
+				if (BGM.fVolume >= ConstantSound.VOLUME_MAX)
 				{
-					BGM.fVolume			= ConstantScore.VOLUME_MAX;		//ボリュームを最大値固定
+					BGM.fVolume			= ConstantSound.VOLUME_MAX;		//ボリュームを最大値固定
 					BGM.Source.volume	= BGM.fVolume;					//変更したボリュームを適応する
 					BGM.bFadeIn			= false;						//フェードイン終了
 				}
@@ -203,7 +203,7 @@ public class SoundManager : MonoBehaviour
 			//設定されたフェード速度を超えた場合
 			else
 			{
-				BGM.fVolume -= ConstantScore.VOLUME_FADE;	//ボリュームを減算
+				BGM.fVolume -= ConstantSound.VOLUME_FADE;	//ボリュームを減算
 				BGM.Source.volume	= BGM.fVolume;			//変更したボリュームを適応する
 				nFadeCounter		= 0;					//カウンターを初期化
 
