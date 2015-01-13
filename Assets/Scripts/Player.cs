@@ -89,6 +89,9 @@ public class Player : MonoBehaviour {
 		if((gm != null && gm.gameState != GameManager.GameState.Play) || anm.GetBool(anmLandingHash))
 			vertical *= 0;
 
+		if((gm != null && gm.gameState != GameManager.GameState.Play))
+			return;
+
 		if(roadJointIs["Parabola"]) {
 			Vector3 vec = myBezier.GetPointAtTime(t);
 			transform.position = vec;

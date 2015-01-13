@@ -52,6 +52,10 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		switch(gameState) {
 			case GameState.Intro:
+				if(Input.GetAxis("Jump") == 1) {
+					startCountState();
+					Destroy(GameObject.FindObjectOfType<IntroCamera>().gameObject);
+				}
 				break;
 			case GameState.Count:
 				break;
