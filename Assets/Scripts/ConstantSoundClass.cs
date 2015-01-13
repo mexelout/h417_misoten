@@ -9,7 +9,7 @@
 //using CommonSound;
 //
 //のような書式になります。
-//読込後は、「int i = ConstantSound.RUN」「PlusSound(ConstantSound.JUMP);」などの様に使用することが出来ます。
+//読込後は、「int JumpSENumber = (int)(CommonSound.JUMP);」「int Volume = ConstantSound.VOLUME_MAX;」などの様に使用することが出来ます。
 //
 //※※※※※ 最終更新 2014/12/08 11:20 ※※※※※
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -38,6 +38,10 @@ namespace CommonSound
 	{
 		BGM_TEST1 = 0	,		//敵艦隊見ゆ
 		BGM_TEST2		,		//決戦！鉄底海峡を抜けて！
+		BGM_TITLE		,		//タイトル画面用BGM
+		BGM_TUTORIAL	,		//チュートリアル画面用BGM
+		BGM_MAIN		,		//ゲーム画面用BGM
+		BGM_RESULT				//リザルト画面用BGM
 	};
 
 	//SEの名前を宣言(int型を基準に設定)
@@ -46,6 +50,10 @@ namespace CommonSound
 		SE_CHEER1 = 0	,		//歓声1
 		SE_CHEER2		,		//歓声2
 		SE_CHEER3		,		//歓声3
+		SE_COUNTDOWN	,		//カウントダウン
+		SE_JUMP			,		//ジャンプ時
+		SE_FALL			,		//転倒時
+		SE_DASH			,		//ダッシュ床
 	};
 
 	//Voiceの名前を宣言(int型を基準に設定)
@@ -55,7 +63,7 @@ namespace CommonSound
 	};
 
 	//==================== スコア用定数クラス ====================
-	public static class ConstantScore
+	public static class ConstantSound
 	{
 		//******************** 定数宣言 ********************
 		public static readonly int		SE_DEVICE_NUMBER			= 2;			//SE再生デバイス数

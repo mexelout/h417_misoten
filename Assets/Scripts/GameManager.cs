@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		InvokeRepeating("StartCounting", 1, 1);
-		scoreBoard = gameObject.GetComponentsInChildren<GUIText>()[1];
+		scoreBoard = gameObject.GetComponent<GUIText>();
 		sm = GameObject.FindObjectOfType<ScoreManager>().GetComponent<ScoreManager>();
 		try {
 			sm.SetNowScore(0);
@@ -23,10 +23,9 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		if(sm != null) {
-			scoreBoard.text = "Score: " + sm.GetNowScore();
-		}
+	void Update ()
+	{
+
 	}
 
 	private void StartCounting() {

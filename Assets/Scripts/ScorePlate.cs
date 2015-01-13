@@ -28,8 +28,17 @@ public class ScorePlate : MonoBehaviour {
 		//コンポーネント取得(デバイス生成)
 		ScrollDevice = this.GetComponent<TextureScroll>();		//テスクチャスクロールデバイス
 
-		//生成した自身を、PlateManagerに格納する
-		GameObject.Find("RankingPlateManager").GetComponent<ScorePlateManager>().SetScorePlateAddress(this.name, -1);
+		//このスクリプトが適応されているゲームシーン毎に、格納先を変化させる
+		if (GameObject.Find("ResultScene(Clone)") || GameObject.Find("ResultScene"))
+		{
+			//生成した自身を、PlateManagerに格納する
+			GameObject.Find("RankingPlateManager").GetComponent<ScorePlateManager>().SetScorePlateAddress(this.name, -1);
+		}
+		else if (GameObject.Find("GameScene(Clone)") || GameObject.Find("GameScene"))
+		{
+			//生成した自身を、PlateManagerに格納する
+			GameObject.Find("ScoreDisplay").GetComponent<GameSceneScoreManager>().SetScorePlateAddress(this.name, -1);
+		}
 	}
 
 	//====================================================================================================
