@@ -10,12 +10,7 @@ public class Bezier : System.Object
 	public Vector3 p3;
 	
 	public float ti = 0f;
-	
-	private Vector3 b0 = Vector3.zero;
-	private Vector3 b1 = Vector3.zero;
-	private Vector3 b2 = Vector3.zero;
-	private Vector3 b3 = Vector3.zero;
-	
+
 	private float Ax;
 	private float Ay;
 	private float Az;

@@ -102,7 +102,10 @@ public class SoundSpeaker : MonoBehaviour
 
 		//******************** その他初期化処理 ********************
 		nFadeCounter	= 0;																//フェード時に使用するカウンターの初期化	
-		SoundManager	= GameObject.Find("SoundManager").GetComponent<SoundManager>();		//サウンドマネージャーのコンポーネントを取得(デバイスとして使用可能に)
+		try {
+			SoundManager	= GameObject.Find("SoundManager").GetComponent<SoundManager>();		//サウンドマネージャーのコンポーネントを取得(デバイスとして使用可能に)
+		} catch {
+		}
 	}
 
 	//====================================================================================================
