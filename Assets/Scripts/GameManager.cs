@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour {
 	}
 	private GUIText scoreBoard;
 	private ScoreManager sm;
-	SoundSpeaker[] SoundSpeaker = new SoundSpeaker[50];
+	//SoundSpeaker[] SoundSpeaker = new SoundSpeaker[50];
 
 	public int frameCount;
 
@@ -36,8 +36,15 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		SoundManager SoundDevice = GameObject.FindObjectOfType<SoundManager>();
+		SoundDevice.PlayBGM((int)(CommonSound.BGM_NAME.BGM_MAIN), false);
+
 		sm = GameObject.FindObjectOfType<ScoreManager>().GetComponent<ScoreManager>();
-		startCount = 5;
+		
+		startCount = 3;
+		GUIText tm = gameObject.GetComponentInChildren<GUIText>();
+		tm.text = startCount.ToString();
+
 		try {
 			sm.SetNowScore(0);
 		} catch {
@@ -70,14 +77,27 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void StartCounting() {
+		//******************** サウンド処理(担当：野村) ********************
+		SoundSpeaker SoundDevice = GetComponent<SoundSpeaker>();				//プレイヤーオブジェクトに内包されているSoundSpeakerスクリプトを取得する
+
 		startCount--;
 		GUIText tm = gameObject.GetComponentInChildren<GUIText>();
 		tm.text = startCount.ToString();
-		if(startCount <= 0) {
+		
+		//カウントダウンを終了して走り始める場合
+		if (startCount <= 0)
+		{
 			tm.text = "Go !!";
 			CancelInvoke("StartCounting");
 			Invoke("StartStringHide", 2);
 			gameState = GameState.Play;
+
+			SoundDevice.PlaySE((int)(CommonSound.SE_NAME.SE_COUNTDOWN_BACK), false);			//カウントダウン後半用SEを再生する
+		}
+		//カウントダウンの値が0以外＝スタートではない場合
+		else
+		{
+			SoundDevice.PlaySE((int)(CommonSound.SE_NAME.SE_COUNTDOWN_FRONT), false);			//カウントダウン前半用SEを再生する
 		}
 	}
 

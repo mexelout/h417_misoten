@@ -47,13 +47,15 @@ namespace CommonSound
 	//SEの名前を宣言(int型を基準に設定)
 	enum SE_NAME : int
 	{
-		SE_CHEER1 = 0	,		//歓声1
-		SE_CHEER2		,		//歓声2
-		SE_CHEER3		,		//歓声3
-		SE_COUNTDOWN	,		//カウントダウン
-		SE_JUMP			,		//ジャンプ時
-		SE_FALL			,		//転倒時
-		SE_DASH			,		//ダッシュ床
+		SE_CHEER1 = 0		,		//歓声1
+		SE_CHEER2			,		//歓声2
+		SE_CHEER3			,		//歓声3
+		SE_JUMP				,		//ジャンプ時
+		SE_FALL				,		//転倒時
+		SE_DASH				,		//ダッシュ床
+		SE_RING				,		//リング通過用
+		SE_COUNTDOWN_FRONT	,		//カウントダウン前奏
+		SE_COUNTDOWN_BACK	,		//カウントダウン終了
 	};
 
 	//Voiceの名前を宣言(int型を基準に設定)

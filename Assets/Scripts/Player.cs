@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using CommonSound;		//サウンド用定数をまとめたス
 
 public class Player : MonoBehaviour {
 	public float speed;
@@ -107,13 +108,17 @@ public class Player : MonoBehaviour {
 			anm.SetFloat(anmSpeedHash, vertical);
 		}
 
-
+		//キーが押されたら通常ジャンプ
 		if(Input.GetButtonDown("Jump") && generateCircle == null) {
 			if(anm.GetBool(anmRotHash) == false && anm.GetBool(anmJumpHash) == false && isFly == false && roadJoint.name.Contains("Road") && anm.GetBool(anmStumbleHash) == false && anm.GetBool(anmLandingHash) == false) {
 				anm.SetBool(anmRotHash, true);
 				anm.Play("Rotate");
 				rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
 				isFly = true;
+
+				//******************** サウンド処理(担当：野村) ********************
+				SoundSpeaker SoundDevice = GetComponent<SoundSpeaker>();				//プレイヤーオブジェクトに内包されているSoundSpeakerスクリプトを取得する
+				SoundDevice.PlaySE((int)(CommonSound.SE_NAME.SE_JUMP), false);			//ジャンプ用SEを再生する
 			}
 		}
 
@@ -234,6 +239,7 @@ public class Player : MonoBehaviour {
 				Physics.gravity = (Vector3.up * 1.5f + roadJoint.transform.up) / 2 * -39.2f;
 				transform.LookAt(roadJoint.transform);
 			} else if(roadJointIs["Parabola"]) {
+				//演出Jump
 				Vector3 p = new Vector3(0.0f,0.0f,0.0f);
 				Vector3 p0 =new  Vector3(0.0f,0.0f,0.0f);
 				Vector3 p1 =new  Vector3(0.0f,0.0f,0.0f);
@@ -249,6 +255,10 @@ public class Player : MonoBehaviour {
 				p2 = p0 + dir * 0.8f;
 				p1.y = p2.y = (p0.y > p3.y) ? p0.y + 30 : p3.y + 30;
 				myBezier = new Bezier(p0, p1, p2, p3);
+
+				//******************** サウンド処理(担当：野村) ********************
+				SoundSpeaker SoundDevice = GetComponent<SoundSpeaker>();				//ダッシュ床オブジェクトに内包されているSoundSpeakerスクリプトを取得する
+				SoundDevice.PlaySE((int)(CommonSound.SE_NAME.SE_JUMP), false);			//ダッシュ床用SEを再生する
 			}
 			if(roadJointIs["Wall"] || roadJointIs["Jump"] || roadJointIs["Parabola"]) {
 				rigidbody.velocity = Vector3.zero;
