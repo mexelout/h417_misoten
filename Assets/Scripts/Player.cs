@@ -201,12 +201,7 @@ public class Player : MonoBehaviour {
 		try {
 			RoadJoint rj = collider.gameObject.GetComponent<RoadJoint>();
 			if(rj.landing) {
-				ToggleLandingAnimation();
-				if(rj) {
-					Invoke("ToggleLandingAnimation", rj.landingWaitTime);
-					if(rj.landingEffect) (Instantiate(rj.landingEffect) as GameObject).transform.position = transform.position;
-					if(rj.landingCamera) Instantiate(rj.landingCamera);
-				}
+				Invoke("StartLandingAnimation", 3);
 			}
 			roadJoint = rj.nextJoint.GetComponent<RoadJoint>();
 			UpdateRoadJointIs();
@@ -330,6 +325,16 @@ public class Player : MonoBehaviour {
 	}
 	public void EndStumble() {
 		anm.SetBool(anmStumbleHash, false);
+	}
+
+	private void StartLandingAnimation() {
+		ToggleLandingAnimation();
+		RoadJoint rj = roadJoint.prevJoint.GetComponent<RoadJoint>();
+		if(rj) {
+			Invoke("ToggleLandingAnimation", rj.landingWaitTime);
+			if(rj.landingEffect) (Instantiate(rj.landingEffect) as GameObject).transform.position = transform.position;
+			if(rj.landingCamera) Instantiate(rj.landingCamera);
+		}
 	}
 
 	private void ToggleLandingAnimation() {
