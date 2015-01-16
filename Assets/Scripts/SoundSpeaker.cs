@@ -81,6 +81,7 @@ public class SoundSpeaker : MonoBehaviour
 				SE[nLoop].fVolume			= ConstantSound.VOLUME_MAX;							//SE再生ボリューム初期化
 				SE[nLoop].bFadeIn			= false;											//SEフェードインフラグ初期化
 				SE[nLoop].bFadeOut			= false;											//SEフェードアウトフラグ初期化
+				SE[nLoop].Source.minDistance = 10;
 			}
 		}
 
