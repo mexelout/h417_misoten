@@ -102,4 +102,13 @@ public class IntroCamera : MonoBehaviour {
 			}
 		}
 	}
+
+	// 破壊的メソッド、使用には十分注意すること
+	public void ForceSetEndPosition(Vector3 p) {
+		endPosition = p;
+	}
+
+	public void ForceSetEndRotate(Vector3 r) {
+		endRotate = r;
+	}
 }
