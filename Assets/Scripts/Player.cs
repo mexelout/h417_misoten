@@ -99,7 +99,7 @@ public class Player : MonoBehaviour {
 			transform.position = vec;
 			t += 0.005f * (speed / speedDefault);
 			if(t > 1f)
-				t = 0f;
+				t = 1f;
 		} else {
 			transform.Translate(0, 0, vertical);
 		}
@@ -217,9 +217,6 @@ public class Player : MonoBehaviour {
 			if(generateCircle) {
 				// ステータスが良ければエフェクト生成
 				if(generateCircle.state > 0) {
-					generateJumpEffect = Instantiate(jumpEffect) as GameObject;
-					generateJumpEffect.transform.position = gameObject.transform.position;
-					generateJumpEffect.transform.parent = gameObject.transform;
 				}
 				Destroy(generateCircle.gameObject);
 				generateCircle = null;
