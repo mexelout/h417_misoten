@@ -14,6 +14,7 @@ public class Circle : MonoBehaviour {
 
 	public GameObject good;
 	public GameObject fever;
+	public GameObject cheer;
 
 	// Use this for initialization
 	void Start () {
@@ -53,15 +54,17 @@ public class Circle : MonoBehaviour {
 		// 3以下くらいがちょうど重なったと思えるサイズ
 		if(Input.GetButtonDown("Jump")) {
 			ScoreManager sm = FindObjectOfType<ScoreManager>();
-			if(3 < dif && dif < 6) {
+			if(2 < dif && dif < 5) {
 				if(sm) sm.PlusNowScore(250);
 				state = 1;
 				Instantiate(good);
+				Instantiate(cheer);
 				return true;
-			} else if(dif <= 3) {
+			} else if(dif <= 2) {
 				state = 2;
 				player.speed *= 1.5f;
 				Instantiate(fever);
+				Instantiate(cheer);
 				if(player.speed > 50) player.speed = 50;
 				if(sm) sm.PlusNowScore(500);
 				return true;
