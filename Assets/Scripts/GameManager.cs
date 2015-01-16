@@ -34,6 +34,23 @@ public class GameManager : MonoBehaviour {
 		private set { _introCamera = value; }
 	}
 
+	public Material goMaterial;
+	private GameObject countDownTextureScroll;
+
+	void Awake() {
+		try {
+			foreach(TextureScroll ts in GetComponentsInChildren<TextureScroll>()) {
+				if(ts.gameObject.name.Contains("CountDown")) {
+					countDownTextureScroll = ts.gameObject;
+					ts.StopHorizontalExecutionFlag(2, true);
+					break;
+				}
+			}
+		} catch {
+			print("Count Down Texture Scroll error");
+		}
+	}
+
 	// Use this for initialization
 	void Start () {
 		SoundManager SoundDevice = GameObject.FindObjectOfType<SoundManager>();
@@ -42,8 +59,6 @@ public class GameManager : MonoBehaviour {
 		sm = GameObject.FindObjectOfType<ScoreManager>().GetComponent<ScoreManager>();
 		
 		startCount = 3;
-		GUIText tm = gameObject.GetComponentInChildren<GUIText>();
-		tm.text = startCount.ToString();
 
 		try {
 			sm.SetNowScore(0);
@@ -53,6 +68,7 @@ public class GameManager : MonoBehaviour {
 		frameCount = 0;
 		gameState = GameState.Intro;
 		Instantiate(introCamera);
+
 	}
 	
 	// Update is called once per frame
@@ -78,16 +94,22 @@ public class GameManager : MonoBehaviour {
 
 	private void StartCounting() {
 		//******************** サウンド処理(担当：野村) ********************
-		SoundSpeaker SoundDevice = GetComponent<SoundSpeaker>();				//プレイヤーオブジェクトに内包されているSoundSpeakerスクリプトを取得する
+		SoundSpeaker SoundDevice = GetComponent<SoundSpeaker>();
 
 		startCount--;
-		GUIText tm = gameObject.GetComponentInChildren<GUIText>();
-		tm.text = startCount.ToString();
+		try {
+			countDownTextureScroll.GetComponent<TextureScroll>().StopHorizontalExecutionFlag(startCount - 1, true);
+		} catch {
+			print("game manager count down scroll error");
+		}
 		
 		//カウントダウンを終了して走り始める場合
 		if (startCount <= 0)
 		{
-			tm.text = "Go !!";
+			//tm.text = "Go !!";
+			countDownTextureScroll.renderer.material = goMaterial;
+			countDownTextureScroll.transform.localScale = new Vector3(4, 2.5f, 1);
+			Destroy(countDownTextureScroll.GetComponent<TextureScroll>());
 			CancelInvoke("StartCounting");
 			Invoke("StartStringHide", 2);
 			gameState = GameState.Play;
@@ -102,8 +124,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void StartStringHide() {
-		GUIText tm = gameObject.GetComponentInChildren<GUIText>();
-		tm.text = "";
+		countDownTextureScroll.transform.localScale = new Vector3(0, 0, 1);
 	}
 
 	public void startCountState() {
