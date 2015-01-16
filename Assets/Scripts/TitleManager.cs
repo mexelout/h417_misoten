@@ -1,11 +1,11 @@
-﻿﻿using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class TitleManager : MonoBehaviour {
+
 	// Use this for initialization
 	void Start(){
 		InvokeRepeating("FlashMessage", 1, 1);
-		
 		SoundManager SoundDevice = GameObject.FindObjectOfType<SoundManager>();
 		SoundDevice.PlayBGM(0 , false);
 	}
@@ -24,20 +24,6 @@ public class TitleManager : MonoBehaviour {
 	}
 
 	void FlashMessage() {
-		GUIText[] gt = GameObject.FindObjectsOfType<GUIText>();
-		if(gt[0].text == "Rabit boots") {
-			if(gt[1].text == "") {
-				gt[1].text = "Please Start Button";
-			} else {
-				gt[1].text = "";
-			}
-		} else {
-			if(gt[0].text == "") {
-				gt[0].text = "Please Start Button";
-			} else {
-				gt[0].text = "";
-			}
-		}
 	}
 
 	public void TitleSceneSoundTest()
