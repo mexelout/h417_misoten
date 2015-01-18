@@ -2,26 +2,28 @@
 using System.Collections;
 
 public class Pause : SpecialFloor {
-	public bool paused = false;
+	public static bool paused{
+		get;
+		private set;
+	}
 
 	public string firstLine;
 	public string secondLine;
 
 	// Use this for initialization
 	void Start () {
-	
+		paused = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonUp ("Start")) {
+		if(Input.GetButtonUp ("Start") && paused) {
 			paused = false;
 			Time.timeScale = 1;
 		}
 	}
 
-	public override void Execute(Player player)
-	{
+	public override void Execute(Player player) {
 		if(!paused) {
 			TutorialManager tm = FindObjectOfType<TutorialManager>();
 			tm.g[0].text = firstLine;
