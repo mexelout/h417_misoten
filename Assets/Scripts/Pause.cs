@@ -17,6 +17,10 @@ public class Pause : SpecialFloor {
 	
 	// Update is called once per frame
 	void Update () {
+	}
+
+	void LateUpdate() {
+		// 全オブジェクトのUpdateが呼ばれた後に呼ばれるUpdate関数です。
 		if(Input.GetButtonUp ("Start") && paused) {
 			paused = false;
 			Time.timeScale = 1;
