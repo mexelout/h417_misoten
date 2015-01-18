@@ -83,13 +83,11 @@ public class Player : MonoBehaviour {
 			anm.SetFloat(anmSpeedHash, 0);
 			return;
 		}
+
 		UpdateRoadJointIs();
 
 		float vertical = speed * Time.deltaTime;
 		float horizontal = (roadJointIs["Jump"] || roadJointIs["Parabola"] || Pause.paused) ? 0 : Input.GetAxis("Horizontal");
-		if(Time.timeScale == 0) {
-			print("test paused: " + horizontal);
-		}
 
 		if((gm != null && gm.gameState != GameManager.GameState.Play) || anm.GetBool(anmLandingHash))
 			vertical *= 0;
@@ -344,7 +342,7 @@ public class Player : MonoBehaviour {
 		anm.SetBool(anmLandingHash, !anm.GetBool(anmLandingHash));
 	}
 
-	private void UpdateRoadJointIs() {
+	public void UpdateRoadJointIs() {
 		if(roadJointIs == null) {
 			roadJointIs = new Dictionary<string, bool>() {
 				{ "Road", false },
