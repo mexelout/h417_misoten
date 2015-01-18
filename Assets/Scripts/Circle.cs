@@ -38,6 +38,7 @@ public class Circle : MonoBehaviour {
 			// pos.x, pos.yは0〜1のビューポート座標なので、その数値に合うように計算し直して値を設定してあげる必要がある
 			pos.x = -8.88888888888889f + 17.77777777777778f * pos.x;
 			pos.y = -5 + 10f * pos.y;
+			pos.z = 9; //  カメラの見えてる範囲に固定している
 			transform.position = pos;
 		}
 		if(dynamicCircle) {
