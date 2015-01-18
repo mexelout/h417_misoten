@@ -21,7 +21,7 @@ public class Pause : SpecialFloor {
 
 	void LateUpdate() {
 		// 全オブジェクトのUpdateが呼ばれた後に呼ばれるUpdate関数です。
-		if(Input.GetButtonUp ("Start") && paused) {
+		if(Input.GetButtonUp ("Jump") && paused) {
 			paused = false;
 			Time.timeScale = 1;
 		}
