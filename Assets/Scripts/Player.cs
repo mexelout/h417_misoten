@@ -202,7 +202,7 @@ public class Player : MonoBehaviour {
 		try {
 			RoadJoint rj = collider.gameObject.GetComponent<RoadJoint>();
 			if(rj.landing) {
-				Invoke("StartLandingAnimation", 3);
+				StartLandingAnimation(rj);
 			}
 			roadJoint = rj.nextJoint.GetComponent<RoadJoint>();
 			UpdateRoadJointIs();
@@ -328,9 +328,8 @@ public class Player : MonoBehaviour {
 		anm.SetBool(anmStumbleHash, false);
 	}
 
-	private void StartLandingAnimation() {
+	private void StartLandingAnimation(RoadJoint rj) {
 		ToggleLandingAnimation();
-		RoadJoint rj = roadJoint.prevJoint.GetComponent<RoadJoint>();
 		if(rj) {
 			Invoke("ToggleLandingAnimation", rj.landingWaitTime);
 			if(rj.landingEffect) (Instantiate(rj.landingEffect) as GameObject).transform.position = transform.position;
