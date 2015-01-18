@@ -345,6 +345,14 @@ public class Player : MonoBehaviour {
 	}
 
 	private void UpdateRoadJointIs() {
+		if(roadJointIs == null) {
+			roadJointIs = new Dictionary<string, bool>() {
+				{ "Road", false },
+				{ "Wall", false },
+				{ "Jump", false },
+				{ "Parabola", false },
+			};
+		}
 		if(roadJoint) {
 			roadJointIs["Road"] = roadJoint.name.Contains("Road");
 			roadJointIs["Wall"] = roadJoint.name.Contains("Wall");
