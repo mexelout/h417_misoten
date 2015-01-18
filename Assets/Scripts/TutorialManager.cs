@@ -17,14 +17,15 @@ public class TutorialManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		i++;
-		 /*if (Input.GetButton ("Start")) {
-				SceneManager sm = GameObject.FindObjectOfType<SceneManager> ();
-				if (sm != null) {
-						sm.NextScene ();
-				}
-		}*/
-	
+		if (Input.GetButtonDown("Start")) {
+			SceneManager sm = GameObject.FindObjectOfType<SceneManager>();
+			if(sm != null) {
+				sm.NextScene();
+			} else {
+				print("スキップボタンが押された");
+			}
+		}
+
 		if (false) {
 			try {
 				if (g [0].text != "tutorial" || g [1].text != "test")
