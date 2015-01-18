@@ -12,10 +12,13 @@ public class TitleManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetButton("Start")) {
+		// 一応両方取れるようにした
+		if(Input.GetButtonDown("Start") || Input.GetButtonDown("Jump")) {
 			SceneManager sm = GameObject.FindObjectOfType<SceneManager>();
 			if(sm != null) {
 				sm.NextScene();
+			} else {
+				print("push startされた");
 			}
 		}
 
