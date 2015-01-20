@@ -10,7 +10,7 @@ public class TutorialManager : MonoBehaviour {
 
 		try {
 			SoundManager SoundDevice = GameObject.FindObjectOfType<SoundManager>();
-			SoundDevice.PlayBGM(0 , false);
+			SoundDevice.PlayBGM((int)CommonSound.BGM_NAME.BGM_TUTORIAL , true);
 		} catch {
 		}
 	}

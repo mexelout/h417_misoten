@@ -24,6 +24,13 @@ public class ResultManager : MonoBehaviour {
 		ScoreManagerClassDevice.SetRanking(ScoreFileDevice.ReadScore());
 		ScoreManager.SortRanking();
 		ScoreFileDevice.WriteScore(ScoreManager.GetRanking());
+
+		try {
+			SoundManager sm = GameObject.FindObjectOfType<SoundManager>();
+			sm.PlayBGM((int)CommonSound.BGM_NAME.BGM_RESULT, false);
+		} catch {
+			print("result bgm play error キャッチアンドリリース");
+		}
 		
 		//******************** ランキング出力 ********************
 		try

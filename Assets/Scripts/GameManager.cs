@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		SoundManager SoundDevice = GameObject.FindObjectOfType<SoundManager>();
-		SoundDevice.PlayBGM((int)(CommonSound.BGM_NAME.BGM_MAIN), false);
+		SoundDevice.PlayBGM((int)(CommonSound.BGM_NAME.BGM_MAIN), true);
 
 		sm = GameObject.FindObjectOfType<ScoreManager>().GetComponent<ScoreManager>();
 		

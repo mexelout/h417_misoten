@@ -7,7 +7,7 @@ public class TitleManager : MonoBehaviour {
 	void Start(){
 		InvokeRepeating("FlashMessage", 1, 1);
 		SoundManager SoundDevice = GameObject.FindObjectOfType<SoundManager>();
-		SoundDevice.PlayBGM(0 , false);
+		SoundDevice.PlayBGM((int)CommonSound.BGM_NAME.BGM_TITLE, true);
 	}
 	
 	// Update is called once per frame
