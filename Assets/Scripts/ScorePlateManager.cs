@@ -103,9 +103,6 @@ public class ScorePlateManager : MonoBehaviour
 			{
 				//プレイヤーのスコアを取得
 				nScoreBuffer = ScoreManager.GetNowScore();
-
-				//############################## ※テスト用に仮の値を設定、実装時には消す事 ############################## 
-				nScoreBuffer = 4321;
 			}
 
 			//1つの順位の表示桁数だけループ
