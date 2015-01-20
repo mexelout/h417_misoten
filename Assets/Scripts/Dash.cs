@@ -4,9 +4,10 @@ using CommonSound;		//サウンド用定数をまとめたスクリプト
 
 public class Dash : SpecialFloor {
 
-	public float	MAX_SPEED = 50.0f;
+	public float	MAX_SPEED = 60.0f;
 	public float	ADD_SPEED = 0.0f;
 	public float	MULTIPLY_SPEED	= 1.5f;
+
 	// Use this for initialization
 	void Start () {
 	

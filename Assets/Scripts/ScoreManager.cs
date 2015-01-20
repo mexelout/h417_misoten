@@ -8,7 +8,6 @@ using CommonScore;
 public class ScoreManager : MonoBehaviour
 {
 	//******************** 定数宣言 ********************
-	
 
 	//******************** メンバ変数宣言 ********************
 	//++++++++++ プライベート ++++++++++
@@ -16,6 +15,8 @@ public class ScoreManager : MonoBehaviour
 	private int	nOldScore		= 0;							//変更前のスコア保存用
 	private int nRankingValue	= ConstantScore.RANKING_MAX;	//ランキングに表示する順位数
 	private int[] nRanking		= null;							//ランキング用スコア保存用
+	
+	//private Player PlayerScript;	// プレイヤースクリプト
 
 	//++++++++++ プロテクト ++++++++++
 
@@ -34,7 +35,11 @@ public class ScoreManager : MonoBehaviour
 		nNowScore		= 0;			//現在のスコア
 		nOldScore		= 0;			//変更前のスコア
 		nRankingValue	= 0;			//ランキングに表示する順位数
+
+		// プレイヤー取得
+		//PlayerScript	= GetComponent<Player>();
 	}
+
 
 	//====================================================================================================
 	//メソッド名	：Update
@@ -106,6 +111,21 @@ public class ScoreManager : MonoBehaviour
 		//現在のスコアを変更前のスコアとして保存
 		nOldScore = nNowScore;
 
+		//====================================================================================================
+		// ここから桑田、急いでいたので数値を取得せず直値で設定している
+		// 本来ならMAXSPEEDとDEFAULTSPEEDは取得すべきだが面倒だし検証の時間が惜しい
+		//====================================================================================================
+		/*// プレイヤーのスピードを取得
+		float fPlayerSpeed = PlayerScript.speed;
+
+		// レートを算出
+		float MAX_SPEED = 60.0f; // ←良くない
+		float DEFAULT_SPEED = 20.0f; // ←良くない
+		float fRate = 1.0f + ( fPlayerSpeed - DEFAULT_SPEED ) / ( MAX_SPEED - DEFAULT_SPEED );
+
+		// 取得スコアを倍率補正
+		nPlusScore = (int)( nPlusScore * fRate );
+		*/
 		//現在のスコアに値を加算する
 		nNowScore += nPlusScore;
 	}
