@@ -39,7 +39,7 @@ public class SceneManager : MonoBehaviour {
 
 	private void RateSetScene() {
 		if(current == titleScene) {
-			SetScene(tutorialScene);
+			SetScene(gameScene);
 			return;
 		}
 		if(current == tutorialScene) {
